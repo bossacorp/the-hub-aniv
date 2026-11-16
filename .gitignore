@@ -1,0 +1,10 @@
+# originales en alta resolución (pesados; se guardan fuera de git)
+media_src/
+
+# videos de vista previa (se regeneran con tools/preview.py video)
+previews/*.mp4
+
+# macOS / Max
+.DS_Store
+*.maxpat.bak
+__pycache__/
