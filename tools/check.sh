@@ -6,7 +6,7 @@ echo "== JS =="
 node --check show/hub_anim.js && echo "hub_anim.js OK"
 echo "== Patch =="
 python3 tools/build_patch.py
-python3 tools/maxpat_builder.py --validate show/the-hub-aniv_v01.maxpat --target 8
+for f in show/*.maxpat; do echo "$f"; python3 tools/maxpat_builder.py --validate "$f" --target 8; done
 echo "== Archivos que Max necesita en show/ =="
 for f in hub_anim.js e1_mano_tinta.png e1_mano_boceto.png e2_luna_paisaje.png \
          e2_luna_luna.png e3_bosque_foto.png e3_bosque_figuras.png; do

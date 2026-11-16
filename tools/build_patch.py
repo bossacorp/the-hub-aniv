@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-build_patch.py — genera show/the-hub-aniv_v01.maxpat (y su mapa de cables).
+build_patch.py — genera show/the-hub-aniv_<VERSION>.maxpat (y su mapa de cables).
 
 El patch se GENERA desde este script para que los cambios queden legibles en
 git (un diff de Python se entiende; un diff de .maxpat casi no).
@@ -11,26 +11,42 @@ Flujo recomendado:
        anótalo en docs/bitacora.md para pasarlo al script.
 
 Compatibilidad: Max 8 y Max 9 (solo objetos de Max 8; JS clásico `js`).
+Máquina de función: MacBook Pro con Max 9.2+.
+
+v02 (ensayo 2026-11-15):
+  - Pads del LPD8 por ruta MIDI DIRECTA (notein → solo golpes → mismos botones
+    que el teclado). Ya no se mapean con Assign MIDI Map: ese mapeo de nota a
+    live.button alternaba 1/0 en cada golpe y "se comía" uno de cada dos.
+  - Conserva el mapeo de perillas hecho en el ensayo (CC 1–8) en el patch.
+  - jit.fpsgui conectado al outlet de bang por cuadro de jit.world (outlet 1).
 """
+import json
 import os
 import sys
+
+from PIL import Image
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 RAIZ = os.path.dirname(AQUI)
 sys.path.insert(0, AQUI)
-from maxpat_builder import Patch  # noqa: E402
+import maxpat_builder  # noqa: E402
+from maxpat_builder import Patch, validate_file  # noqa: E402
 
-VERSION = "v01"
+maxpat_builder.UI_IO.setdefault("live.numbox", (1, 2))
+maxpat_builder.IO.setdefault("switch", (3, 1))
+
+VERSION = "v02"
 NOMBRE = f"the-hub-aniv_{VERSION}"
 
-# capa → (archivo en show/, dims de la matriz, @layer = orden de dibujo)
+# capa → (archivo en show/, @layer = orden de dibujo). Las dimensiones de cada
+# jit.matrix se leen del PNG, así se puede regenerar a otra resolución.
 CAPAS = [
-    ("foto",    "e3_bosque_foto.png",    (1200, 1600), 1),
-    ("tinta",   "e1_mano_tinta.png",     (1600, 1600), 2),
-    ("luna",    "e2_luna_luna.png",      (1600, 1600), 3),
-    ("paisaje", "e2_luna_paisaje.png",   (1600, 1600), 4),
-    ("figuras", "e3_bosque_figuras.png", (1200, 1600), 5),
-    ("boceto",  "e1_mano_boceto.png",    (1600, 1600), 6),
+    ("foto",    "e3_bosque_foto.png",    1),
+    ("tinta",   "e1_mano_tinta.png",     2),
+    ("luna",    "e2_luna_luna.png",      3),
+    ("paisaje", "e2_luna_paisaje.png",   4),
+    ("figuras", "e3_bosque_figuras.png", 5),
+    ("boceto",  "e1_mano_boceto.png",    6),
 ]
 
 # Pads del LPD8 (número de pad, etiqueta, mensaje al motor JS)
@@ -44,6 +60,7 @@ PADS = [
     (7, "7 · SEGURA", "scene 6"),
     (8, "8 · NEGRO", None),          # va a un toggle (cada golpe alterna)
 ]
+NOTA_PAD1 = 36   # LPD8 Wireless, programa del ensayo: pads = notas 36–43 (canal 10)
 
 # Perillas del LPD8 (número, longname, etiqueta corta, mensaje, valor inicial)
 KNOBS = [
@@ -59,7 +76,19 @@ KNOBS = [
 KNOB_DESC = {1: "capa A ↔ B", 2: "0 = congelado", 3: "respiración/deriva", 4: "encuadre",
              5: "0.2 s … 20 s", 6: "frío ↔ cálido", 7: "reserva (s vz_k7)", 8: "brillo / fundido"}
 
+# Mapeo de perillas tal como lo guardó Max en el ensayo del 2026-11-15
+# (docs/ensayos/2026-11-15_the-hub-aniv_v01_mapeo-lpd8.maxpat). Los pads NO se
+# mapean: van por la ruta MIDI directa.
+MIDI_MAP_PERILLAS = {f"k{i}_{n}": f"{i}.ctrl.0.chan.midi" for i, n in
+                     [(1, "mezcla"), (2, "velocidad"), (3, "amplitud"), (4, "zoom"),
+                      (5, "transicion"), (6, "tono"), (7, "vizzie"), (8, "master")]}
+
 GRIS = [0.72, 0.72, 0.74, 1.0]
+
+
+def dims_png(archivo):
+    with Image.open(os.path.join(RAIZ, "show", archivo)) as im:
+        return im.size
 
 
 def build():
@@ -73,8 +102,8 @@ def build():
     p.panel((510, 318, 470, 120), x=1300, y=140)
     p.panel((20, 452, 470, 225), x=1300, y=180, color=(0.10, 0.10, 0.12, 1.0))
     p.panel((510, 452, 470, 225), x=1300, y=220, color=(0.10, 0.10, 0.12, 1.0))
-    p.title_block(pres_xy=(20, 12), subtitle="LPD8 Wireless · pads = escenas y disparos · "
-                  "perillas = mezcla y movimiento · teclas 1–8 = pads (plan B)")
+    p.title_block(pres_xy=(20, 12), subtitle="LPD8 Wireless · pads = escenas y disparos (MIDI directo) · "
+                  "perillas = mezcla y movimiento · teclas 1–8 = pads")
     p.comment("PADS — ESCENAS", 30, 60, w=200, pres=(32, 76, 200, 20), bold=True)
     p.comment("PERILLAS — MEZCLA Y MOVIMIENTO", 560, 60, w=260, pres=(522, 76, 300, 20), bold=True)
 
@@ -82,11 +111,11 @@ def build():
     p.section("MOTOR: escenas, mezcla y animación suave (show/hub_anim.js)", 430, 300, w=420)
     js = p.obj("js hub_anim.js", 430, 330, w=160, io=(1, 2))
     rte = p.obj("route " + " ".join(c[0] for c in CAPAS), 430, 380, w=330)
-
     p.connect(js, 0, rte, 0)
 
-    # ---------------- PADS ----------------
-    p.section("CONTROL: pads LPD8 (Assign MIDI Map a cada botón) + teclas 1–8", 30, 20, w=400)
+    # ---------------- PADS (botones en pantalla) ----------------
+    p.section("CONTROL: pads (clic, teclas 1–8 o LPD8 por MIDI directo; NO usar Assign MIDI Map)",
+              30, 20, w=520)
     pad_ids = {}
     # Disposición física LPD8: fila de arriba pads 5–8, fila de abajo pads 1–4
     for num, etiqueta, mensaje in PADS:
@@ -112,16 +141,45 @@ def build():
     p.connect(neg, 0, pblack, 0)
     p.connect(pblack, 0, js, 0)
 
-    # Teclado (plan B sin controlador): teclas 1–8 disparan los pads
-    p.section("PLAN B: teclado numérico 1–8 = pads", 30, 150, w=300)
-    key = p.obj("key", 30, 175, io=(1, 4))
+    # Teclado: teclas 1–8 disparan los pads
+    p.section("TECLADO: 1–8 = pads", 30, 150, w=300)
+    key = p.obj("key", 30, 175, io=(0, 4))
     sel = p.obj("sel 49 50 51 52 53 54 55 56", 80, 175, w=200)
     p.connect(key, 0, sel, 0)
     for i in range(8):
         p.connect(sel, i, pad_ids[i + 1], 0)
 
+    # ---------------- PADS LPD8: ruta MIDI directa ----------------
+    # notein → stripnote (solo note-on = un golpe) → − nota del pad 1 → sel 0..7 → botón.
+    # Si el LPD8 está en modo TOGGLE (un golpe manda note-on, el siguiente note-off),
+    # el interruptor "LPD8 en modo toggle" deja pasar también los note-off.
+    p.section("PADS LPD8 DIRECTO: notein → solo golpes → mismos botones que el teclado", 30, 960, w=520)
+    nin_pads = p.obj("notein", 30, 990)
+    strip = p.obj("stripnote", 30, 1030, io=(2, 2))
+    p.connect(nin_pads, 1, strip, 1)    # velocidad (llega primero: notein sale de der. a izq.)
+    p.connect(nin_pads, 0, strip, 0)    # tono
+    modo = p.toggle("lpd8_modo_toggle", "LPD8 toggle", 200, 990, pres=(170, 640, 24, 24), init=0)
+    p.comment("LPD8 en modo TOGGLE (cada golpe cuenta)", 230, 990, w=200,
+              pres=(198, 643, 280, 18), size=10.0, color=GRIS)
+    mas1 = p.obj("+ 1", 200, 1030)
+    p.connect(modo, 0, mas1, 0)
+    sw = p.obj("switch 2", 30, 1070, io=(3, 1))
+    p.connect(mas1, 0, sw, 0)
+    p.connect(strip, 0, sw, 1)          # 1 = solo note-on (pads momentáneos, recomendado)
+    p.connect(nin_pads, 0, sw, 2)       # 2 = cualquier evento de nota (pads en toggle)
+    base = p._param_ui("live.numbox", "nota_pad1", "Nota pad 1", 330, 990, 44, 15,
+                       (96, 642, 44, 18), 0, 127, NOTA_PAD1, 1)
+    p.comment("nota pad 1", 380, 990, w=80, pres=(32, 643, 62, 18), size=10.0, color=GRIS)
+    resta = p.obj("- 36", 30, 1110)
+    p.connect(base, 0, resta, 1)
+    p.connect(sw, 0, resta, 0)
+    selp = p.obj("sel 0 1 2 3 4 5 6 7", 30, 1150, w=160)
+    p.connect(resta, 0, selp, 0)
+    for i in range(8):
+        p.connect(selp, i, pad_ids[i + 1], 0)
+
     # ---------------- PERILLAS ----------------
-    p.section("CONTROL: perillas LPD8 (Assign MIDI Map a cada perilla)", 560, 20, w=400)
+    p.section("CONTROL: perillas LPD8 (mapeadas con Assign MIDI Map: CC 1–8)", 560, 20, w=400)
     for num, longname, etiqueta, mensaje, init in KNOBS:
         col = (num - 1) % 4
         fila_arriba = num <= 4
@@ -165,7 +223,8 @@ def build():
     p.connect(recargar, 0, dl, 0)
     tr = p.obj("t b b b b b b", 30, 490, w=200)
     p.connect(dl, 0, tr, 0)
-    for i, (capa, archivo, (w, h), layer) in enumerate(CAPAS):
+    for i, (capa, archivo, layer) in enumerate(CAPAS):
+        w, h = dims_png(archivo)
         x = 30 + i * 200
         m = p.msg(f"importmovie {archivo}, bang", x, 530, w=190)
         p.connect(tr, 5 - i, m, 0)
@@ -201,35 +260,43 @@ def build():
     p.connect(pfs, 0, world, 0)
     fps = p.ui("jit.fpsgui", 300, 880, 80, 35, pres=(880, 340, 80, 35))
     p.comment("fps", 390, 880, w=40, pres=(850, 348, 30, 20), size=10.0)
-    p.connect(world, 0, fps, 0)
+    p.connect(world, 1, fps, 0)   # outlet 1 = bang por cuadro dibujado
 
-    # ---------------- MONITOR MIDI ----------------
+    # ---------------- MONITOR MIDI + PUERTO ----------------
     ctl, nin = p.midi_monitor(x=1100, y=460, pres=(32, 462))
-    p.port_menu("Puerto del monitor (elige el LPD8)", [ctl, nin], 1100, 560, pres=(32, 530, 200, 22))
+    p.port_menu("Puerto MIDI del LPD8 (monitor y pads)", [ctl, nin, nin_pads], 1100, 560,
+                pres=(32, 530, 200, 22))
 
     # ---------------- CÓMO USAR ----------------
     p.usage_notes([
         "1. Deja los 6 PNG y hub_anim.js en la MISMA carpeta que este patch.",
         "2. Abre el patch: la ventana 'hub' carga las imágenes en ~1 s.",
         "3. Arrastra la ventana al proyector y pulsa esc (pantalla completa).",
-        "4. Mapear: botón MIDI (Assign MIDI Map) de la barra inferior → clic en un pad/perilla",
-        "   de esta pantalla → toca el pad/perilla del LPD8 → repite.",
-        "   Mismo botón para salir. Guarda el patch.",
-        "5. Pads 1–5 escenas · 6 pulso · 7 segura · 8 negro.",
-        "6. Sin controlador: teclas 1–8 (con la ventana del patch activa).",
-        "7. Si una imagen no aparece: Recargar y revisa la consola (⌘M).",
+        "4. Perillas K1–K8: ya vienen mapeadas a CC 1–8 (Assign MIDI Map).",
+        "5. Pads: NO los mapees. Entran por MIDI directo (notas 36–43).",
+        "   Elige el LPD8 en 'Puerto MIDI'. Si un golpe sí y otro no:",
+        "   el LPD8 está en TOGGLE → ponlo en MOMENTARY o activa el",
+        "   interruptor 'LPD8 en modo TOGGLE'.",
+        "6. Pads 1–5 escenas · 6 pulso · 7 segura · 8 negro on/off.",
+        "7. Teclas 1–8 hacen lo mismo que los pads (respaldo).",
     ], pres=(522, 460, 450, 210), x=1100, y=700)
-    p.comment("Monitor MIDI: mueve un control del LPD8 y mira qué número llega. "
-              "Si no llega nada, revisa Bluetooth en Audio MIDI Setup.", 1100, 640, w=330,
-              pres=(32, 560, 450, 34), size=10.0, color=GRIS)
-    p.comment("Vizzie (v02): K7 ya publica [s vz_k7] 0–1. jit.world → @output_texture 1 → "
-              "módulo Vizzie → VIEWR.", 1100, 670, w=330, pres=(32, 600, 450, 34), size=10.0,
-              color=GRIS)
+    p.comment("Monitor MIDI: golpea un pad y mira la velocidad. Golpe = valor > 0, "
+              "soltar = 0 (MOMENTARY). Si golpes alternos dan 0 → el pad está en TOGGLE.",
+              1100, 640, w=330, pres=(32, 560, 450, 34), size=10.0, color=GRIS)
+    p.comment("Vizzie: K7 ya publica [s vz_k7] 0–1.", 1100, 670, w=330,
+              pres=(32, 600, 450, 18), size=10.0, color=GRIS)
 
     avisos = p.validate()
+    d = p.to_dict()
+    pmap = {}
+    for longname, src in MIDI_MAP_PERILLAS.items():
+        pmap[longname] = {"srcname": src, "min": 0.0, "max": 1.0, "flags": 2}
+    d["patcher"]["parameter_map"] = {"midi": pmap}
     out = os.path.join(RAIZ, "show", f"{NOMBRE}.maxpat")
-    p.save(out)
+    with open(out, "w", encoding="utf-8") as f:
+        json.dump(d, f, indent=1, ensure_ascii=False)
     p.save_wiring_md(os.path.join(RAIZ, "docs", f"cables_{VERSION}.md"))
+    avisos += validate_file(out, target=8)
     return out, avisos
 
 

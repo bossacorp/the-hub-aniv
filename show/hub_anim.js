@@ -230,7 +230,8 @@ function scene(n) {
     n = Math.round(n);
     if (!ESCENAS[n]) { post("hub_anim: no existe la escena " + n + "\n"); return; }
     escena = n;
-    outlet(1, "escena", n, ESCENAS[n].nombre);
+    // nombre en palabras sueltas: así el message box no lo muestra entre comillas
+    outlet(1, ["escena", n].concat(ESCENAS[n].nombre.split(" ")));
 }
 function snap() {   // sin fundido: usar al abrir el patch
     for (var i = 0; i < NOMBRES.length; i++) {

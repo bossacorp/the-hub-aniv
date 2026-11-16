@@ -19,7 +19,14 @@ producción. Responde en español.
 - Originales en alta van en `media_src/` (ignorado por git). Para agregar una obra: copiar
   capas a `media_src/`, agregarlas en `tools/prep_media.py`, `CAPAS` de `hub_anim.js`,
   `CAPAS` de `build_patch.py` y `tools/preview.py`.
-- Controlador: Akai LPD8 Wireless (8 pads, 8 perillas). Los controles de la interfaz usan
-  Parameter Mode → se mapean con Assign MIDI Map; no asumir números de CC/nota.
+- Máquina de función: MacBook Pro con Max 9.2+ (la Mac mini con Max 8 es respaldo; por eso
+  se mantiene la compatibilidad con Max 8).
+- Controlador: Akai LPD8 Wireless (8 pads, 8 perillas).
+  - **Perillas** → Parameter Mode + Assign MIDI Map. El mapeo del ensayo (CC 1–8) se inyecta
+    desde `MIDI_MAP_PERILLAS` en `build_patch.py`.
+  - **Pads** → ruta MIDI directa (`notein` → `stripnote` → `sel` → mismos botones que el
+    teclado). NUNCA mapear pads con Assign MIDI Map: una nota mapeada a `live.button` dispara
+    uno de cada dos golpes (ver `docs/instrucciones.md` §4). Nota base configurable (36).
+  - No asumir números de CC/nota nuevos sin verlos en el monitor MIDI.
 - Versionar con etiquetas por ensayo: `git tag ensayo-AAAA-MM-DD` y una línea en `docs/bitacora.md`.
 - Commits pequeños y descriptivos en español.

@@ -1,4 +1,7 @@
-# Instrucciones de uso — the-hub-aniv v01 (prueba de capas)
+# Instrucciones de uso — the-hub-aniv v02 (prueba de capas)
+
+Máquina de función: **MacBook Pro, Max 9.2+**. El patch sigue siendo compatible con Max 8
+(la Mac mini queda como respaldo).
 
 **Qué es:** un primer ejercicio, a propósito austero: las 3 obras del diseñador (2 capas cada
 una) se componen con su transparencia original y se animan con movimientos lentos
@@ -14,7 +17,7 @@ para probar proyección, encuadre, legibilidad y cómo se complementan las capas
 
 ## 2. Abrir
 
-1. Doble clic en `show/the-hub-aniv_v01.maxpat`. Abre en **presentación**.
+1. Doble clic en `show/the-hub-aniv_v02.maxpat`. Abre en **presentación**.
    Para ver el cableado: Cmd+Alt+E sale del modo presentación y Cmd+E desbloquea (edición).
 2. Se abre la ventana **hub** (960×540). En ~1 s aparecen las imágenes (Escena 1).
 3. Arrastra la ventana **hub** al proyector y, con ella al frente, pulsa **esc** (o el
@@ -27,20 +30,47 @@ para probar proyección, encuadre, legibilidad y cómo se complementan las capas
 - **USB:** se reconoce solo.
 - **Bluetooth (Mac):** Audio MIDI Setup → Ventana → Mostrar estudio MIDI → icono Bluetooth
   → *Connect* junto al LPD8. Luego en Max: Options → MIDI Setup y verifica que aparezca.
-- Elige el LPD8 en el menú **"Puerto del monitor"** y toca pads/perillas: el monitor MIDI
-  muestra CC (valor · número · canal) y nota (tono · velocidad · canal).
+- Elige el LPD8 en el menú **"Puerto MIDI del LPD8"**. Ese menú fija el puerto del monitor
+  **y de los pads**: así otro equipo conectado (p. ej. el Launchpad) no dispara escenas.
+  El menú no recuerda la elección al reabrir el patch: elígelo cada vez (sin elegir, escucha
+  todos los puertos).
+- Toca pads/perillas: el monitor MIDI muestra CC (valor · número · canal) y nota
+  (tono · velocidad · canal).
 
-## 4. Mapear (una sola vez, se guarda con el patch)
+## 4. Pads y perillas: cómo entran (cambio de la v02)
 
-1. Activa el modo de mapeo MIDI: botón **MIDI** (*Assign MIDI Map*) en la barra inferior del
-   patcher, o clic derecho sobre un control → mapear a MIDI. Los controles mapeables se marcan.
-2. Clic en **Pad 1** en pantalla → golpea el pad 1 del LPD8. Repite pads 1–8.
-3. Clic en **K1** → gira la perilla 1 del LPD8. Repite K1–K8.
-4. Desactiva el modo de mapeo con el mismo botón. **Guarda el patch** (Cmd+S) — o mejor, guarda una copia
-   `the-hub-aniv_v01_mapeado.maxpat` y súbela al repo.
+**Perillas K1–K8 → Assign MIDI Map.** Ya vienen mapeadas en el patch con lo que grabaste en
+el ensayo (CC 1–8). Si cambias de programa en el LPD8, re-mapea con el botón **MIDI**
+(*Assign MIDI Map*) de la barra inferior y guarda.
 
-> Sugerencia: en el editor del LPD8 deja los pads en **modo nota, momentáneo**
-> (el pad 8 ya alterna negro on/off dentro del patch).
+**Pads 1–8 → ruta MIDI directa (no los mapees).** Un `notein` recibe las notas del LPD8,
+deja pasar solo el **golpe** (note-on, velocidad > 0) y "presiona" el mismo botón que
+presiona la tecla 1–8. Por eso pad y tecla ahora se comportan igual.
+
+- Ajustes en el panel del monitor: **nota pad 1** (36 por defecto: pads = 36–43) y el
+  interruptor **LPD8 en modo TOGGLE**.
+- Recomendado: en el editor del LPD8 Wireless pon los pads en **MOMENTARY** (momentáneo).
+  Si no puedes cambiarlo, enciende **LPD8 en modo TOGGLE** y cada golpe contará igual.
+- Si alguna vez mapeas un pad con Assign MIDI Map además de la ruta directa, ese pad
+  disparará dos veces: deja los pads sin mapear.
+
+### Por qué el LPD8 "se comía" golpes y el teclado no (ensayo 2026-11-15)
+
+| | Teclado (1–8) | LPD8 con Assign MIDI Map (v01) |
+|---|---|---|
+| Qué llega al botón | un `bang` por tecla | un **valor** del parámetro (1 al golpear, 0 después) |
+| Qué hace `live.button` | dispara siempre | dispara solo cuando el valor pasa a 1 |
+| Resultado | 1 tecla = 1 disparo | el mapeo de nota alternó 1 / 0 en golpes sucesivos (o el pad estaba en TOGGLE): **1 de cada 2 golpes no hacía nada** |
+| Pad 8 (negro) | 2 teclas = encender + apagar | 4 golpes = encender + apagar |
+
+En el archivo del ensayo, los pads quedaron mapeados como notas 36–43 en canal 10 con un
+modo distinto al de las perillas (`flags 3` contra `flags 2`); las perillas, que mandan
+valores continuos, funcionaron bien. Con la ruta directa ya no importa cómo Max interprete
+la nota: cada golpe es un `bang`, igual que una tecla.
+
+**Cómo comprobar el modo del pad:** en el monitor MIDI golpea un pad varias veces y mira la
+velocidad. MOMENTARY: golpe = número > 0 y al soltar 0. TOGGLE: un golpe da > 0 y el
+siguiente da 0.
 
 ## 5. Mapa de ejecución
 
@@ -64,7 +94,7 @@ Disposición igual a la física del LPD8 (fila de arriba pads 5–8, abajo 1–4
 | K6 | Tono | frío ↔ neutro ↔ cálido | continuo |
 | K7 | Reserva para Vizzie (`[s vz_k7]`, 0–1) | 0–1 | sin efecto en v01 |
 | K8 | Master / brillo general | 0–1 | continuo (a 0 = negro) |
-| Teclas 1–8 | Igual que pads 1–8 | — | plan B con Max al frente |
+| Teclas 1–8 | Igual que pads 1–8 | — | respaldo, con Max al frente |
 
 **Qué hace K1 en cada escena**
 
@@ -107,13 +137,16 @@ Vista de todas: `previews/escenas_mix.jpg`.
 | La imagen aparece estirada | aspecto de ventana raro | revisa que la ventana sea 16:9; los videoplanes usan `@transform_reset 1` |
 | Nada se mueve | interruptor *Animación* apagado o K2 en 0 | enciéndelo / sube K2 |
 | `js: can't find file hub_anim.js` | falta el JS junto al patch | copia `hub_anim.js` a `show/` |
-| El LPD8 no responde | no mapeado o Bluetooth caído | monitor MIDI; re-mapea; usa USB; teclas 1–8 de respaldo |
+| Un golpe del pad sí y otro no | pad en TOGGLE en el LPD8, o el pad quedó mapeado con Assign MIDI Map | pon los pads en MOMENTARY (o enciende "LPD8 en modo TOGGLE"); borra mapeos de pads |
+| Los pads disparan escenas equivocadas | otro programa del LPD8 (otras notas) | ajusta **nota pad 1** al número que muestra el monitor al golpear el pad 1 |
+| Los pads no responden, las perillas sí | puerto equivocado en el menú | elige el LPD8 en "Puerto MIDI del LPD8" |
+| El LPD8 no responde | Bluetooth caído | monitor MIDI; usa USB; teclas 1–8 de respaldo |
 | fps bajos en la Mac mini | GPU modesta | `python3 tools/prep_media.py --max 1280`, cerrar otras apps, `@fsaa 0` |
-| `fps` muestra 0 aunque se vea bien | jit.world no manda bang por su outlet en esa versión | ignóralo o cambia a `@output_texture 1` (v02) |
+| `fps` muestra 0 aunque se vea bien | el contador no recibe el bang por cuadro | v02 lo conecta al outlet 1 de `jit.world`; si sigue en 0, avisa |
 
 ## 9. Checklist de ensayo
 
-1. Monitor MIDI: todos los pads y perillas llegan (anota números en la bitácora).
+1. Monitor MIDI: todos los pads y perillas llegan; 8 golpes seguidos del pad 8 = 4 veces negro on/off.
 2. fps con escena 4 o 5 (las de 3 capas) en pantalla completa, en la máquina de función.
 3. Proyector: resolución nativa, sin keystone digital extremo, aspecto correcto.
 4. Recorrido completo con el músico (o con un audio parecido) usando solo el LPD8.
