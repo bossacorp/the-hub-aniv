@@ -84,7 +84,7 @@ El botón **BANK A/B** del LPD8 cambia lo que mandan los 8 pads: **luz verde = b
 | **Pads 6 · 7 · 8 hacen lo mismo en A y en B** (pulso · segura · negro) | si te equivocas de banco, los pads de emergencia siguen en el mismo lugar |
 | Escena = pad: **A1–A5 → escenas 1–5**, **B1–B5 → escenas 11–15** | nunca hay dos pads que llamen a la misma escena |
 | **"Último pad: B1"** en pantalla y paneles verde/rojo como las luces del LPD8 | sabes en qué banco está el LPD8 con un vistazo |
-| Pads de B sin obra todavía (B4–B5) **no hacen nada** (la escena actual sigue) | un golpe a un pad libre nunca deja la pantalla en negro |
+| Pads de B sin obra todavía (B5) **no hacen nada** (la escena actual sigue) | un golpe a un pad libre nunca deja la pantalla en negro |
 
 **Antes del ensayo (2 min):** elige el LPD8 en "Puerto MIDI", pon el LPD8 en banco A y golpea
 el pad 1: el monitor debe mostrar tono 36 (= "nota A1"). Cambia a banco B (luz roja) y golpea el
@@ -106,7 +106,8 @@ Disposición igual a la física del LPD8 (fila de arriba pads 5–8, abajo 1–4
 | B1 · tecla q | Escena 11 **Sombrero: día y noche** (foto ↔ pintura nocturna) | — | disparo |
 | B2 · tecla w | Escena 12 **Hongo y criatura** (foto de hongos ↔ criatura pintada) | — | disparo |
 | B3 · tecla e | Escena 13 **Nahual** (ficus con silla ↔ jaguar nahual y animales) | — | disparo |
-| B4–B5 · teclas r t | escenas 14–15, para los próximos pares | — | sin efecto hasta agregarlos |
+| B4 · tecla r | Escena 14 **Acuarela y noche** (reflejo en acuarela ↔ escena nocturna) | — | disparo |
+| B5 · tecla t | escena 15, para el último par | — | sin efecto hasta agregarlo |
 | A6 / B6 · teclas 6 / y | **Pulso**: acento que empuja la mezcla y da un latido de escala | — | momentáneo, decae en ~0.4 s |
 | A7 / B7 · teclas 7 / u | **Escena segura** (luna sola, estable) | — | disparo |
 | A8 / B8 · teclas 8 / i | **Negro** | on/off | alterna; fundido de ~1.5 s |
@@ -133,9 +134,11 @@ Disposición igual a la física del LPD8 (fila de arriba pads 5–8, abajo 1–4
 | B1 Sombrero (11) | foto de día | solo la pintura nocturna sobre negro (en 0.5: la noche se enciende sobre la foto) |
 | B2 Hongo y criatura (12) | hongos, criatura apenas insinuada | criatura plena, hongos como eco tenue |
 | B3 Nahual (13) | el ficus con la silla vacía | los animales habitan el árbol, foto en penumbra |
+| B4 Acuarela y noche (14) | la acuarela luminosa sobre negro (sin papel blanco) | la noche completa; en 0.5 la acuarela es una bruma sobre la noche |
 
 Vista de todas: `previews/escenas_mix.jpg`.
 
+> Obra 7 es panorámica (2.74:1): llena el ancho con franjas negras arriba y abajo.
 > Obras 4–6 son verticales (9:16 y 3:4): en pantalla 16:9 queda una columna con negro a los lados.
 > K4 la agranda (recorta arriba/abajo). La foto y la pintura se mueven pegadas: nunca se desalinean.
 

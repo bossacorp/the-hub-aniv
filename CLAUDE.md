@@ -19,7 +19,9 @@ producción. Responde en español.
 - Originales en alta van en `media_src/` (ignorado por git). **Agregar un par del diseñador:**
   1. copiar las capas a `media_src/` con su nombre original;
   2. `tools/prep_media.py` → `CAPAS` con modo `alfa` (PNG con transparencia), `opaca`
-     (foto/fondo) o `luma` (pintura sobre negro sin alfa: el brillo se vuelve alfa);
+     (foto/fondo), `luma` (pintura sobre negro sin alfa: el brillo se vuelve alfa) o
+     `pastel` (pintura sobre blanco que irá sobre negro: el papel se vuelve transparente y
+     se conserva el color; `papel` existe pero sobre negro deja los pastel turbios);
   3. `show/hub_anim.js` → `CAPAS` (aspecto ancho/alto; `sigue: "<guía>"` si es el mismo
      encuadre que otra capa, para que se muevan pegadas), `NOMBRES` y una escena en `ESCENAS`;
   4. `tools/build_patch.py` → `CAPAS` (archivo, `@layer` siguiente) y la etiqueta del pad en `PADS`;

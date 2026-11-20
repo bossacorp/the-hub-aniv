@@ -12,6 +12,14 @@ Modos por capa:
   "luma"  — capa pintada sobre NEGRO sin transparencia (JPEG). El brillo se vuelve
             alfa: el negro desaparece y lo luminoso queda (como un modo "pantalla").
             Sobre fondo negro se ve idéntica al original.
+  "papel" — capa pintada sobre BLANCO sin transparencia (acuarela). Lo inverso de "luma":
+            el blanco del papel se vuelve transparente y queda la pintura (como un modo
+            "multiplicar"). Sobre fondo blanco se ve idéntica al original; sobre negro, los
+            pigmentos quedan flotando y el papel desaparece. OJO: sobre negro los colores
+            pastel se vuelven oscuros y turbios.
+  "pastel" — capa pintada sobre BLANCO que va a verse sobre NEGRO: conserva el color
+            original (pastel) y usa la cantidad de pintura, reforzada, como alfa. El
+            papel desaparece y la acuarela queda luminosa; el blanco tenue queda como bruma.
 
 Uso:
     python3 tools/prep_media.py              # lado mayor = 1600 px (default)
@@ -48,9 +56,13 @@ CAPAS = [
     # Obra 6 — "Nahual" (960 x 1280, vertical 3:4; archivos par07-*)
     ("par07-01.jpeg", "e6_nahual_foto.png", "opaca"),                   # ficus con silla roja y papel picado
     ("par07-02.jpeg", "e6_nahual_animales.png", "luma"),                # jaguar nahual, jaguares y loros sobre negro
+    # Obra 7 — "Acuarela y noche" (1280 x 468, panorámica 2.74:1; archivos par04-*)
+    ("par04-01.jpeg", "e7_acuarela_reflejo.png", "pastel"),             # paisaje reflejado en acuarela sobre blanco
+    ("par04-02.jpeg", "e7_acuarela_noche.png", "opaca"),                # escena nocturna: sol, madre e hijo, estrellas
 ]
 
 UMBRAL_LUMA = 6   # 0–255: el ruido de compresión JPEG por debajo de esto se vuelve transparente
+REFUERZO_PASTEL = 2.5   # modo "pastel": cuánto se refuerza la pintura (más = más opaca)
 
 
 def a_luma(im):
@@ -63,6 +75,29 @@ def a_luma(im):
     col = np.clip(rgb / 255.0 / seguro, 0, 1)
     col[a == 0] = 0
     out = np.dstack([col * 255, a * 255]).round().astype(np.uint8)
+    return Image.fromarray(out, "RGBA")
+
+
+def a_papel(im):
+    """Blanco → transparente. tinta = 255 − color; alfa = canal con más tinta; color = el
+    pigmento puro que, sobre blanco con ese alfa, reproduce el original exacto."""
+    rgb = np.asarray(im.convert("RGB")).astype(np.float32)
+    tinta = 255.0 - rgb
+    m = tinta.max(axis=2)
+    a = np.clip((m - UMBRAL_LUMA) / (255.0 - UMBRAL_LUMA), 0, 1)
+    seguro = np.maximum(a, 1e-6)[..., None]
+    col = np.clip(1.0 - tinta / 255.0 / seguro, 0, 1)
+    col[a == 0] = 1
+    out = np.dstack([col * 255, a * 255]).round().astype(np.uint8)
+    return Image.fromarray(out, "RGBA")
+
+
+def a_pastel(im):
+    """Blanco → transparente conservando el color original: alfa = tinta reforzada."""
+    rgb = np.asarray(im.convert("RGB")).astype(np.float32)
+    tinta = (255.0 - rgb).max(axis=2)
+    a = np.clip((tinta - UMBRAL_LUMA) / (255.0 - UMBRAL_LUMA) * REFUERZO_PASTEL, 0, 1) ** 0.8
+    out = np.dstack([rgb, a * 255]).round().astype(np.uint8)
     return Image.fromarray(out, "RGBA")
 
 
@@ -86,6 +121,10 @@ def main():
             im = im.resize((round(w * k), round(h * k)), Image.LANCZOS)
         if modo == "luma":
             im = a_luma(im)
+        elif modo == "papel":
+            im = a_papel(im)
+        elif modo == "pastel":
+            im = a_pastel(im)
         elif modo == "opaca":
             im = im.convert("RGBA")   # alfa 255: mismo formato ARGB que las demás en Jitter
         out = os.path.join(dst_dir, dst)

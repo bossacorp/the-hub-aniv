@@ -62,6 +62,17 @@ para pasarlo a `tools/build_patch.py`.
 - Escena 13: K1 de la silla vacía a los animales habitando el árbol; la foto baja a 30 %,
   no a negro, para que el lugar siga presente.
 
+## 2026-11-19 — obra 7 "Acuarela y noche" (par 4 de 5) en B4
+
+- Archivos: `par04-01.jpeg` (paisaje reflejado en acuarela sobre BLANCO) y `par04-02.jpeg`
+  (escena nocturna: sol con rostro, madre e hijo con luna, estrellas), 1280×468 (2.74:1).
+- Primera capa pintada sobre blanco del set. El modo `papel` (blanco → transparente exacto)
+  dejaba los pastel oscuros y turbios sobre negro; nuevo modo `pastel` conserva el color
+  original y usa la pintura reforzada (×2.5) como alfa: la acuarela queda luminosa.
+  Si el diseñador prefiere ver el papel blanco, cambiar el modo a `opaca` (proyecta mucha luz).
+- Escena 14: s = 0.65 para que la panorámica llene el ancho 16:9. K1 de la acuarela sola
+  a la noche; en 0.5 la acuarela es una bruma sobre la noche.
+
 ### Notas del próximo ensayo (llenar)
 - Nota que manda B1 (luz roja), si no es 44:
 - fps escena 4 en pantalla completa:

@@ -72,11 +72,15 @@ var CAPAS = {
     // Obra 6 — "Nahual" (3:4). La pintura está calcada sobre la foto (el jaguar se
     // sienta en la silla, los animales en las ramas): va pegada a la foto.
     ficus:    { asp: 960 / 1280, piv: [0, 0] },                    // e6_nahual_foto.png     (opaca)
-    nahual:   { asp: 960 / 1280, piv: [0, 0], sigue: "ficus" }     // e6_nahual_animales.png (alfa por brillo)
+    nahual:   { asp: 960 / 1280, piv: [0, 0], sigue: "ficus" },    // e6_nahual_animales.png (alfa por brillo)
+    // Obra 7 — "Acuarela y noche" (panorámica 2.74:1). Encuadres distintos.
+    // Con s = 0.65 el ancho llena una pantalla 16:9 (franjas negras arriba y abajo).
+    noche7:   { asp: 1280 / 468, piv: [0, 0] },                    // e7_acuarela_noche.png   (opaca)
+    reflejo:  { asp: 1280 / 468, piv: [0, 0] }                     // e7_acuarela_reflejo.png (alfa: papel fuera, color pastel)
 };
 // Orden de proceso. Una capa que "sigue" a otra va DESPUÉS de su guía.
 var NOMBRES = ["foto", "tinta", "luna", "paisaje", "figuras", "boceto", "sombrero", "noche",
-               "hongo", "criatura", "ficus", "nahual"];
+               "hongo", "criatura", "ficus", "nahual", "noche7", "reflejo"];
 
 // ------------------------------------------------------------------
 // ESCENAS
@@ -130,8 +134,14 @@ var ESCENAS = {
         // habitan el árbol, la foto queda en penumbra (no se apaga: el lugar sigue ahí).
         ficus:  { a0: 1.0, a1: 0.3, s: 1.0, x: 0, y: 0, resp: 0.012, deriva: 0.008, giro: 0.3 },
         nahual: { a0: 0.0, a1: 1.0 }     // geometría y movimiento: los de "ficus"
+    }},
+    14: { nombre: "Acuarela y noche", capas: {
+        // K1 en 0: la acuarela sola, luminosa sobre negro (sin el papel) · 0.5: la noche
+        // aparece debajo y la acuarela queda como un velo · 1: la noche completa.
+        noche7:  { a0: 0.0, a1: 1.0,  s: 0.65, x: 0, y: 0, resp: 0.010, deriva: 0.010, giro: 0 },
+        reflejo: { a0: 1.0, a1: 0.15, s: 0.65, x: 0, y: 0, resp: 0.020, deriva: 0.025, giro: 0 }
     }}
-    // 14–15: próximos pares del diseñador
+    // 15: último par del diseñador
 };
 
 // Frecuencias base (Hz) de los osciladores, a velocidad 1.
