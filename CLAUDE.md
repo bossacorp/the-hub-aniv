@@ -16,9 +16,15 @@ producción. Responde en español.
   deriva, giro). Coordenadas: alto de ventana −1..1, ancho ±aspecto (`@transform_reset 1`).
 - Antes de commit: `bash tools/check.sh` (node --check, regenerar y validar patch, previews).
   Mira `previews/escenas_mix.jpg` después de tocar una escena.
-- Originales en alta van en `media_src/` (ignorado por git). Para agregar una obra: copiar
-  capas a `media_src/`, agregarlas en `tools/prep_media.py`, `CAPAS` de `hub_anim.js`,
-  `CAPAS` de `build_patch.py` y `tools/preview.py`.
+- Originales en alta van en `media_src/` (ignorado por git). **Agregar un par del diseñador:**
+  1. copiar las capas a `media_src/` con su nombre original;
+  2. `tools/prep_media.py` → `CAPAS` con modo `alfa` (PNG con transparencia), `opaca`
+     (foto/fondo) o `luma` (pintura sobre negro sin alfa: el brillo se vuelve alfa);
+  3. `show/hub_anim.js` → `CAPAS` (aspecto ancho/alto; `sigue: "<guía>"` si es el mismo
+     encuadre que otra capa, para que se muevan pegadas), `NOMBRES` y una escena en `ESCENAS`;
+  4. `tools/build_patch.py` → `CAPAS` (archivo, `@layer` siguiente) y la etiqueta del pad en `PADS`;
+  5. `bash tools/check.sh` y revisar la fila nueva en `previews/escenas_mix.jpg`.
+  `tools/preview.py` toma capas y escenas solo.
 - Máquina de función: MacBook Pro con Max 9.2+ (la Mac mini con Max 8 es respaldo; por eso
   se mantiene la compatibilidad con Max 8).
 - Controlador: Akai LPD8 Wireless (8 pads, 8 perillas).
@@ -27,6 +33,12 @@ producción. Responde en español.
   - **Pads** → ruta MIDI directa (`notein` → `stripnote` → `sel` → mismos botones que el
     teclado). NUNCA mapear pads con Assign MIDI Map: una nota mapeada a `live.button` dispara
     uno de cada dos golpes (ver `docs/instrucciones.md` §4). Nota base configurable (36).
+  - **Bancos A/B**: A (luz verde) = notas desde `NOTA_A1` (36, medido); B (luz roja) = desde
+    `NOTA_B1` (44, SIN MEDIR). Escena = pad: A1–A5 → escenas 1–5, B1–B5 → 11–15. Pads 6/7/8
+    iguales en ambos bancos (pulso, segura `scene 6`, negro). Nunca asignar la misma escena a
+    dos pads; nunca poner algo destructivo en un pad que en el otro banco sea inocuo.
+    El patch avisa si los rangos de notas se empalman.
+  - Teclado: 1–8 = banco A, q w e r t y u i = banco B.
   - No asumir números de CC/nota nuevos sin verlos en el monitor MIDI.
 - Versionar con etiquetas por ensayo: `git tag ensayo-AAAA-MM-DD` y una línea en `docs/bitacora.md`.
 - Commits pequeños y descriptivos en español.

@@ -1,4 +1,4 @@
-# Instrucciones de uso — the-hub-aniv v02 (prueba de capas)
+# Instrucciones de uso — the-hub-aniv v03 (capas + banco B)
 
 Máquina de función: **MacBook Pro, Max 9.2+**. El patch sigue siendo compatible con Max 8
 (la Mac mini queda como respaldo).
@@ -17,7 +17,7 @@ para probar proyección, encuadre, legibilidad y cómo se complementan las capas
 
 ## 2. Abrir
 
-1. Doble clic en `show/the-hub-aniv_v02.maxpat`. Abre en **presentación**.
+1. Doble clic en `show/the-hub-aniv_v03.maxpat`. Abre en **presentación**.
    Para ver el cableado: Cmd+Alt+E sale del modo presentación y Cmd+E desbloquea (edición).
 2. Se abre la ventana **hub** (960×540). En ~1 s aparecen las imágenes (Escena 1).
 3. Arrastra la ventana **hub** al proyector y, con ella al frente, pulsa **esc** (o el
@@ -47,7 +47,7 @@ el ensayo (CC 1–8). Si cambias de programa en el LPD8, re-mapea con el botón 
 deja pasar solo el **golpe** (note-on, velocidad > 0) y "presiona" el mismo botón que
 presiona la tecla 1–8. Por eso pad y tecla ahora se comportan igual.
 
-- Ajustes en el panel del monitor: **nota pad 1** (36 por defecto: pads = 36–43) y el
+- Ajustes en el panel del monitor: **nota A1** (36: pads A = 36–43), **nota B1** (ver §4b) y el
   interruptor **LPD8 en modo TOGGLE**.
 - Recomendado: en el editor del LPD8 Wireless pon los pads en **MOMENTARY** (momentáneo).
   Si no puedes cambiarlo, enciende **LPD8 en modo TOGGLE** y cada golpe contará igual.
@@ -72,20 +72,42 @@ la nota: cada golpe es un `bang`, igual que una tecla.
 velocidad. MOMENTARY: golpe = número > 0 y al soltar 0. TOGGLE: un golpe da > 0 y el
 siguiente da 0.
 
+## 4b. Bancos A y B del LPD8 (v03)
+
+El botón **BANK A/B** del LPD8 cambia lo que mandan los 8 pads: **luz verde = banco A**,
+**luz roja = banco B**. Las perillas no cambian con el banco.
+
+| Regla | Para qué |
+|---|---|
+| Cada banco manda un **rango de notas distinto** (A: 36–43 medido en ensayo; B: por medir, 44–51 por defecto) | una nota solo puede caer en un banco |
+| El patch revisa los dos rangos y muestra **"Bancos: … sin empalme"** o **¡AVISO!** | si se empalman lo ves antes de la función |
+| **Pads 6 · 7 · 8 hacen lo mismo en A y en B** (pulso · segura · negro) | si te equivocas de banco, los pads de emergencia siguen en el mismo lugar |
+| Escena = pad: **A1–A5 → escenas 1–5**, **B1–B5 → escenas 11–15** | nunca hay dos pads que llamen a la misma escena |
+| **"Último pad: B1"** en pantalla y paneles verde/rojo como las luces del LPD8 | sabes en qué banco está el LPD8 con un vistazo |
+| Pads de B sin obra todavía (B2–B5) **no hacen nada** (la escena actual sigue) | un golpe a un pad libre nunca deja la pantalla en negro |
+
+**Antes del ensayo (2 min):** elige el LPD8 en "Puerto MIDI", pon el LPD8 en banco A y golpea
+el pad 1: el monitor debe mostrar tono 36 (= "nota A1"). Cambia a banco B (luz roja) y golpea el
+pad 1: escribe ese tono en **"nota B1"**. El aviso debe decir **sin empalme**. Si el LPD8 manda
+las mismas notas en A y en B, cambia las notas del banco B en el editor del LPD8 (por ejemplo
+44–51) y guarda el programa.
+
 ## 5. Mapa de ejecución
 
 Disposición igual a la física del LPD8 (fila de arriba pads 5–8, abajo 1–4).
 
 | Control | Parámetro | Rango | Comportamiento |
 |---|---|---|---|
-| Pad 1 | Escena **Mano y flor** (boceto ↔ tinta azul) | — | disparo, fundido con K5 |
-| Pad 2 | Escena **Luna** (luna dentro del anillo de paisaje) | — | disparo |
-| Pad 3 | Escena **Bosque** (foto + figuras etéreas) | — | disparo |
-| Pad 4 | Cruce **Luna en el bosque** | — | disparo |
-| Pad 5 | Cruce **Boceto en el paisaje** | — | disparo |
-| Pad 6 | **Pulso**: acento que empuja la mezcla y da un latido de escala | — | momentáneo, decae en ~0.4 s |
-| Pad 7 | **Escena segura** (luna sola, estable) | — | disparo |
-| Pad 8 | **Negro** | on/off | alterna; fundido de ~1.5 s |
+| A1 · tecla 1 | Escena **Mano y flor** (boceto ↔ tinta azul) | — | disparo, fundido con K5 |
+| A2 · tecla 2 | Escena **Luna** (luna dentro del anillo de paisaje) | — | disparo |
+| A3 · tecla 3 | Escena **Bosque** (foto + figuras etéreas) | — | disparo |
+| A4 · tecla 4 | Cruce **Luna en el bosque** | — | disparo |
+| A5 · tecla 5 | Cruce **Boceto en el paisaje** | — | disparo |
+| B1 · tecla q | Escena 11 **Sombrero: día y noche** (foto ↔ pintura nocturna) | — | disparo |
+| B2–B5 · teclas w e r t | escenas 12–15, para los próximos pares | — | sin efecto hasta agregarlos |
+| A6 / B6 · teclas 6 / y | **Pulso**: acento que empuja la mezcla y da un latido de escala | — | momentáneo, decae en ~0.4 s |
+| A7 / B7 · teclas 7 / u | **Escena segura** (luna sola, estable) | — | disparo |
+| A8 / B8 · teclas 8 / i | **Negro** | on/off | alterna; fundido de ~1.5 s |
 | K1 | Mezcla capa A ↔ B dentro de la escena | 0–1 | continuo |
 | K2 | Velocidad del movimiento | 0 (congelado) – 2× | continuo, sin saltos |
 | K3 | Amplitud del movimiento | 0 – 2× | continuo |
@@ -94,7 +116,7 @@ Disposición igual a la física del LPD8 (fila de arriba pads 5–8, abajo 1–4
 | K6 | Tono | frío ↔ neutro ↔ cálido | continuo |
 | K7 | Reserva para Vizzie (`[s vz_k7]`, 0–1) | 0–1 | sin efecto en v01 |
 | K8 | Master / brillo general | 0–1 | continuo (a 0 = negro) |
-| Teclas 1–8 | Igual que pads 1–8 | — | respaldo, con Max al frente |
+| Teclado | 1–8 = banco A · q w e r t y u i = banco B | — | respaldo, con Max al frente |
 
 **Qué hace K1 en cada escena**
 
@@ -106,8 +128,12 @@ Disposición igual a la física del LPD8 (fila de arriba pads 5–8, abajo 1–4
 | 4 Luna en el bosque | luna sobre la foto, sin figuras | figuras plenas, luna tenue |
 | 5 Boceto en el paisaje | paisaje + luna | la luz del boceto entra en el anillo, luna tenue |
 | 7 Segura | luna sola (K1 no cambia nada) | |
+| B1 Sombrero (11) | foto de día | solo la pintura nocturna sobre negro (en 0.5: la noche se enciende sobre la foto) |
 
 Vista de todas: `previews/escenas_mix.jpg`.
+
+> Obra 4 es vertical 9:16: en pantalla 16:9 queda una columna con negro a los lados.
+> K4 la agranda (recorta arriba/abajo). La foto y la pintura se mueven pegadas: nunca se desalinean.
 
 ## 6. Cómo se usa durante el set (improvisación planeada)
 
@@ -122,7 +148,8 @@ Vista de todas: `previews/escenas_mix.jpg`.
 
 ## 7. Verificación rápida (5 min)
 
-1. Pads 1–5 y 7 cambian de escena; pad 8 funde a negro y regresa.
+1. A1–A5, B1 y 7 cambian de escena; 8 funde a negro y regresa, en ambos bancos.
+   "Bancos" dice *sin empalme*; "Último pad" muestra A o B según la luz del LPD8.
 2. Cada perilla hace algo visible (K7 no, es reserva).
 3. `fps` ≥ 30 en la máquina de función, con la ventana en pantalla completa.
 4. Escenas 3 y 4 (verticales) muestran barras negras laterales: es intencional.
@@ -138,7 +165,9 @@ Vista de todas: `previews/escenas_mix.jpg`.
 | Nada se mueve | interruptor *Animación* apagado o K2 en 0 | enciéndelo / sube K2 |
 | `js: can't find file hub_anim.js` | falta el JS junto al patch | copia `hub_anim.js` a `show/` |
 | Un golpe del pad sí y otro no | pad en TOGGLE en el LPD8, o el pad quedó mapeado con Assign MIDI Map | pon los pads en MOMENTARY (o enciende "LPD8 en modo TOGGLE"); borra mapeos de pads |
-| Los pads disparan escenas equivocadas | otro programa del LPD8 (otras notas) | ajusta **nota pad 1** al número que muestra el monitor al golpear el pad 1 |
+| Los pads disparan escenas equivocadas | otro programa del LPD8 (otras notas) | ajusta **nota A1** / **nota B1** al tono que muestra el monitor al golpear el pad 1 de cada banco |
+| Un pad dispara en A y en B a la vez / aviso de empalme | los dos bancos mandan notas que se cruzan | cambia las notas del banco B en el editor del LPD8 y corrige **nota B1** |
+| En banco B no pasa nada | **nota B1** no coincide con lo que manda el LPD8 | golpea B1, lee el tono en el monitor y escríbelo en **nota B1** |
 | Los pads no responden, las perillas sí | puerto equivocado en el menú | elige el LPD8 en "Puerto MIDI del LPD8" |
 | El LPD8 no responde | Bluetooth caído | monitor MIDI; usa USB; teclas 1–8 de respaldo |
 | fps bajos en la Mac mini | GPU modesta | `python3 tools/prep_media.py --max 1280`, cerrar otras apps, `@fsaa 0` |
@@ -150,7 +179,7 @@ Vista de todas: `previews/escenas_mix.jpg`.
 2. fps con escena 4 o 5 (las de 3 capas) en pantalla completa, en la máquina de función.
 3. Proyector: resolución nativa, sin keystone digital extremo, aspecto correcto.
 4. Recorrido completo con el músico (o con un audio parecido) usando solo el LPD8.
-5. Fallo: apagar el LPD8 a la mitad → seguir con teclas 1–8 / mouse; reconectar.
+5. Fallo: apagar el LPD8 a la mitad → seguir con teclado (1–8 / q–i) o mouse; reconectar.
 6. Luz de sala: el negro del proyector se ve gris; probar K8 y escenas con fondo negro.
 7. Mac en función: sin notificaciones, sin protector de pantalla, sin actualizaciones.
 8. Abrir el patch 30 min antes y dejarlo corriendo.

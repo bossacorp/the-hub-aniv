@@ -5,6 +5,7 @@
 
   Uso:
     node tools/sim_anim.js guion.json > estados.json
+    node tools/sim_anim.js --escenas            # {id: nombre} de las escenas definidas
 
   guion.json: lista de pasos. Cada paso es un mensaje o un avance de tiempo:
     [["scene",1],["snap"],["mix",0.5],["frames",90,30],["scene",2],["frames",120,30]]
@@ -32,6 +33,12 @@ vm.createContext(sandbox);
 vm.runInContext(src, sandbox, { filename: "hub_anim.js" });
 const api = sandbox.module.exports;
 
+if (process.argv[2] === "--escenas") {   // lista {id: nombre} para tools/preview.py
+    const out = {};
+    for (const k of Object.keys(api.ESCENAS)) out[k] = api.ESCENAS[k].nombre;
+    process.stdout.write(JSON.stringify(out));
+    process.exit(0);
+}
 const guion = JSON.parse(fs.readFileSync(process.argv[2], "utf8"));
 const cuadros = [];
 for (const paso of guion) {

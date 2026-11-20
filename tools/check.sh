@@ -8,8 +8,7 @@ echo "== Patch =="
 python3 tools/build_patch.py
 for f in show/*.maxpat; do echo "$f"; python3 tools/maxpat_builder.py --validate "$f" --target 8; done
 echo "== Archivos que Max necesita en show/ =="
-for f in hub_anim.js e1_mano_tinta.png e1_mano_boceto.png e2_luna_paisaje.png \
-         e2_luna_luna.png e3_bosque_foto.png e3_bosque_figuras.png; do
+for f in hub_anim.js $(python3 -c "import sys; sys.path.insert(0,'tools'); from build_patch import CAPAS; print(' '.join(c[1] for c in CAPAS))"); do
   [ -f "show/$f" ] && echo "  ok  $f" || { echo "  FALTA $f"; exit 1; }
 done
 echo "== Previews =="

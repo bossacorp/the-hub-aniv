@@ -12,13 +12,15 @@
           <capa> position x y 0
           <capa> rotatexyz 0 0 grados
           <capa> enable 0|1
-      En el patch, [route foto tinta luna paisaje figuras boceto] reparte
-      cada mensaje a su videoplane.
+      En el patch, [route foto tinta luna ...] reparte cada mensaje a su
+      videoplane (un nombre por capa, mismo orden que NOMBRES).
     - Outlet 1: estado para la interfaz ("escena 2 Luna").
 
   Mensajes que entiende (inlet 0), todos los valores de perilla son 0–1
     bang            avanza un cuadro
-    scene n         cambia a la escena n (1–6) con fundido
+    scene n         cambia a la escena n con fundido. Numeración = pad del LPD8:
+                      banco A: 1–5 escenas, 6 segura (pad 7)
+                      banco B: 11–15 escenas (pads B1–B5)
     snap            salta a la escena actual sin fundido (al abrir el patch)
     mix f           K1  mezcla entre las capas de la escena (A ↔ B)
     speed f         K2  velocidad del movimiento (0 = congelado)
@@ -57,9 +59,15 @@ var CAPAS = {
     luna:    { asp: 1.0,  piv: [0, 0.14] },  // e2_luna_luna.png        (alfa)
     paisaje: { asp: 1.0,  piv: [0, 0] },     // e2_luna_paisaje.png     (alfa)
     figuras: { asp: 0.75, piv: [0, 0] },     // e3_bosque_figuras.png   (alfa)
-    boceto:  { asp: 1.0,  piv: [0, 0] }      // e1_mano_boceto.png      (alfa)
+    boceto:  { asp: 1.0,  piv: [0, 0] },     // e1_mano_boceto.png      (alfa)
+    // Obra 4 — "Sombrero" (9:16). La pintura nocturna es el MISMO encuadre que la
+    // foto: "sigue" la obliga a moverse idéntica a la foto (misma fase y geometría)
+    // para que nunca se desalineen.
+    sombrero: { asp: 721 / 1280, piv: [0, 0] },                    // e4_sombrero_foto.png  (opaca)
+    noche:    { asp: 721 / 1280, piv: [0, 0], sigue: "sombrero" }  // e4_sombrero_noche.png (alfa por brillo)
 };
-var NOMBRES = ["foto", "tinta", "luna", "paisaje", "figuras", "boceto"];
+// Orden de proceso. Una capa que "sigue" a otra va DESPUÉS de su guía.
+var NOMBRES = ["foto", "tinta", "luna", "paisaje", "figuras", "boceto", "sombrero", "noche"];
 
 // ------------------------------------------------------------------
 // ESCENAS
@@ -94,7 +102,15 @@ var ESCENAS = {
     }},
     6: { nombre: "Segura (luna sola)", capas: {
         luna:    { a0: 1.0, a1: 1.0, s: 0.85, x: 0, y: -0.05, resp: 0.020, deriva: 0.004, giro: 1.5 }
+    }},
+
+    // ---------------- BANCO B (pads B1–B5 = escenas 11–15) ----------------
+    11: { nombre: "Sombrero: día y noche", capas: {
+        // K1 en 0: foto de día · 0.5: la noche se enciende sobre la foto · 1: solo la noche
+        sombrero: { a0: 1.0, a1: 0.0, s: 1.0, x: 0, y: 0, resp: 0.012, deriva: 0.008, giro: 0.4 },
+        noche:    { a0: 0.0, a1: 1.0 }   // geometría y movimiento: los de "sombrero"
     }}
+    // 12–15: próximos pares del diseñador
 };
 
 // Frecuencias base (Hz) de los osciladores, a velocidad 1.
@@ -119,6 +135,10 @@ var fase = {};          // fases distintas por capa para que no se muevan igual
         var n = NOMBRES[i];
         cur[n] = { a: 0, s: 1, x: 0, y: 0, resp: 0, deriva: 0, giro: 0, on: -1 };
         fase[n] = (i * 2.399) % (2 * Math.PI);   // ángulo áureo
+    }
+    for (var j = 0; j < NOMBRES.length; j++) {     // capas que siguen a otra: misma fase
+        var g = CAPAS[NOMBRES[j]].sigue;
+        if (g) fase[NOMBRES[j]] = fase[g];
     }
 })();
 
@@ -150,8 +170,11 @@ function meta(n) {
     var def = ESCENAS[escena] ? ESCENAS[escena].capas[n] : null;
     if (!def) return null;
     var m = clamp(P.mix + pulso * 0.6, 0, 1);
-    return { a: lerp(def.a0, def.a1, m), s: def.s, x: def.x, y: def.y,
-             resp: def.resp, deriva: def.deriva, giro: def.giro };
+    var geo = def;
+    var guia = CAPAS[n].sigue;                 // capa que copia la geometría de su guía
+    if (guia && ESCENAS[escena].capas[guia]) geo = ESCENAS[escena].capas[guia];
+    return { a: lerp(def.a0, def.a1, m), s: geo.s, x: geo.x, y: geo.y,
+             resp: geo.resp, deriva: geo.deriva, giro: geo.giro };
 }
 
 // ------------------------------------------------------------------
@@ -191,6 +214,11 @@ function paso(dt) {
                 c.giro = suaviza(c.giro, m.giro, dt, tau);
             }
         }
+        var guia = CAPAS[n].sigue;
+        if (m && guia && ESCENAS[escena].capas[guia]) {   // pegada a su guía: misma geometría exacta
+            var cg = cur[guia];
+            c.s = cg.s; c.x = cg.x; c.y = cg.y; c.resp = cg.resp; c.deriva = cg.deriva; c.giro = cg.giro;
+        }
         c.a = suaviza(c.a, aMeta, dt, tau);
         if (c.a < 0.003 && aMeta === 0) c.a = 0;
 
@@ -228,7 +256,11 @@ function paso(dt) {
 // ------------------------------------------------------------------
 function scene(n) {
     n = Math.round(n);
-    if (!ESCENAS[n]) { post("hub_anim: no existe la escena " + n + "\n"); return; }
+    if (!ESCENAS[n]) {   // pad de banco B aún sin obra: no cambia nada, solo avisa
+        post("hub_anim: la escena " + n + " todavía no existe\n");
+        outlet(1, ["escena", n, "vacía", "·", "sigue"].concat(ESCENAS[escena].nombre.split(" ")));
+        return;
+    }
     escena = n;
     // nombre en palabras sueltas: así el message box no lo muestra entre comillas
     outlet(1, ["escena", n].concat(ESCENAS[n].nombre.split(" ")));

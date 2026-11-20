@@ -32,6 +32,19 @@ para pasarlo a `tools/build_patch.py`.
 - Dimensiones de las matrices se leen de los PNG (permite regenerar a 2048 px).
 - Por probar: 8 golpes del pad 8 = 4 ciclos de negro; fps en pantalla completa en la MacBook Pro.
 
+## 2026-11-19 — v03: banco B del LPD8 + obra 4 "Sombrero" (par 1 de 5 nuevos)
+
+- Archivos del diseñador: `par05-01.jpeg` (foto de día) y `par05-02.jpeg` (pintura nocturna
+  sobre negro), 721×1280 (9:16). JPEG sin transparencia → la pintura se convierte con modo
+  `luma` (el negro se vuelve transparente; sobre negro se ve igual al original).
+- Escena 11 "Sombrero: día y noche" en B1. La pintura es el mismo encuadre que la foto:
+  se mueve pegada a ella (`sigue`) para que nunca se desalineen.
+- Banco B: 16 pads en pantalla (paneles verde/rojo como las luces del LPD8), notas por
+  rango (A1 = 36 medido, B1 = 44 por medir), aviso de empalme, "Último pad", teclas q–i.
+  Pads 6/7/8 iguales en ambos bancos. B2–B5 reservados para los próximos 4 pares.
+- Por probar: nota real de B1 en el LPD8 Wireless; que el aviso diga "sin empalme".
+
 ### Notas del próximo ensayo (llenar)
+- Nota que manda B1 (luz roja):
 - fps escena 4 en pantalla completa:
 - Escenas que funcionaron / que no:
