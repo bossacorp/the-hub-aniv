@@ -64,10 +64,15 @@ var CAPAS = {
     // foto: "sigue" la obliga a moverse idéntica a la foto (misma fase y geometría)
     // para que nunca se desalineen.
     sombrero: { asp: 721 / 1280, piv: [0, 0] },                    // e4_sombrero_foto.png  (opaca)
-    noche:    { asp: 721 / 1280, piv: [0, 0], sigue: "sombrero" }  // e4_sombrero_noche.png (alfa por brillo)
+    noche:    { asp: 721 / 1280, piv: [0, 0], sigue: "sombrero" }, // e4_sombrero_noche.png (alfa por brillo)
+    // Obra 5 — "Hongo y criatura" (9:16). Encuadres distintos: cada capa se mueve
+    // por su lado (la criatura flota sobre la foto). La criatura gira sobre su torso.
+    hongo:    { asp: 900 / 1600, piv: [0, 0] },                    // e5_hongo_foto.png     (opaca)
+    criatura: { asp: 900 / 1600, piv: [0, 0.2] }                   // e5_hongo_criatura.png (alfa por brillo)
 };
 // Orden de proceso. Una capa que "sigue" a otra va DESPUÉS de su guía.
-var NOMBRES = ["foto", "tinta", "luna", "paisaje", "figuras", "boceto", "sombrero", "noche"];
+var NOMBRES = ["foto", "tinta", "luna", "paisaje", "figuras", "boceto", "sombrero", "noche",
+               "hongo", "criatura"];
 
 // ------------------------------------------------------------------
 // ESCENAS
@@ -109,8 +114,14 @@ var ESCENAS = {
         // K1 en 0: foto de día · 0.5: la noche se enciende sobre la foto · 1: solo la noche
         sombrero: { a0: 1.0, a1: 0.0, s: 1.0, x: 0, y: 0, resp: 0.012, deriva: 0.008, giro: 0.4 },
         noche:    { a0: 0.0, a1: 1.0 }   // geometría y movimiento: los de "sombrero"
+    }},
+    12: { nombre: "Hongo y criatura", capas: {
+        // K1 en 0: los hongos, con la criatura apenas insinuada · 1: la criatura sobre negro,
+        // los hongos como un eco tenue. El cuello de la criatura repite los anillos del hongo.
+        hongo:    { a0: 1.0,  a1: 0.2, s: 1.0, x: 0, y: 0, resp: 0.015, deriva: 0.012, giro: 0 },
+        criatura: { a0: 0.15, a1: 1.0, s: 1.0, x: 0, y: 0, resp: 0.030, deriva: 0.020, giro: 1.2 }
     }}
-    // 12–15: próximos pares del diseñador
+    // 13–15: próximos pares del diseñador
 };
 
 // Frecuencias base (Hz) de los osciladores, a velocidad 1.

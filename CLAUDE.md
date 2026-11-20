@@ -34,7 +34,7 @@ producción. Responde en español.
     teclado). NUNCA mapear pads con Assign MIDI Map: una nota mapeada a `live.button` dispara
     uno de cada dos golpes (ver `docs/instrucciones.md` §4). Nota base configurable (36).
   - **Bancos A/B**: A (luz verde) = notas desde `NOTA_A1` (36, medido); B (luz roja) = desde
-    `NOTA_B1` (44, SIN MEDIR). Escena = pad: A1–A5 → escenas 1–5, B1–B5 → 11–15. Pads 6/7/8
+    `NOTA_B1` (44; sin empalme verificado en ensayo 2026-11-19). Escena = pad: A1–A5 → escenas 1–5, B1–B5 → 11–15. Pads 6/7/8
     iguales en ambos bancos (pulso, segura `scene 6`, negro). Nunca asignar la misma escena a
     dos pads; nunca poner algo destructivo en un pad que en el otro banco sea inocuo.
     El patch avisa si los rangos de notas se empalman.

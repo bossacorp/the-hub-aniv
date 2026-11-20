@@ -2,7 +2,7 @@
 
 | # | Desde (outlet) | Hacia (inlet) |
 |---|---|---|
-| 1 | `js hub_anim.js` (0) | `route foto tinta luna paisaje figuras boceto sombrero noche` (0) |
+| 1 | `js hub_anim.js` (0) | `route foto tinta luna paisaje figuras boceto sombrero noche hongo criatura` (0) |
 | 2 | `[live.button] padA1` (0) | `[msg] set Último pad: A1` (0) |
 | 3 | `[msg] set Último pad: A1` (0) | `[msg] Último pad: —` (0) |
 | 4 | `[live.button] padA1` (0) | `[msg] scene 1` (0) |
@@ -144,56 +144,64 @@
 | 140 | `route escena fade negro` (1) | `[flonum]` (0) |
 | 141 | `loadbang` (0) | `delay 600` (0) |
 | 142 | `[live.button] recargar` (0) | `delay 600` (0) |
-| 143 | `delay 600` (0) | `t b b b b b b b b` (0) |
-| 144 | `t b b b b b b b b` (7) | `[msg] importmovie e3_bosque_foto.png, bang` (0) |
+| 143 | `delay 600` (0) | `t b b b b b b b b b b` (0) |
+| 144 | `t b b b b b b b b b b` (9) | `[msg] importmovie e3_bosque_foto.png, bang` (0) |
 | 145 | `[msg] importmovie e3_bosque_foto.png, bang` (0) | `jit.matrix 4 char 1200 1600` (0) |
 | 146 | `jit.matrix 4 char 1200 1600` (0) | `jit.gl.videoplane hub @layer 1 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
-| 147 | `route foto tinta luna paisaje figuras boceto sombrero noche` (0) | `jit.gl.videoplane hub @layer 1 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
-| 148 | `t b b b b b b b b` (6) | `[msg] importmovie e1_mano_tinta.png, bang` (0) |
+| 147 | `route foto tinta luna paisaje figuras boceto sombrero noche hongo criatura` (0) | `jit.gl.videoplane hub @layer 1 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
+| 148 | `t b b b b b b b b b b` (8) | `[msg] importmovie e1_mano_tinta.png, bang` (0) |
 | 149 | `[msg] importmovie e1_mano_tinta.png, bang` (0) | `jit.matrix 4 char 1600 1600` (0) |
 | 150 | `jit.matrix 4 char 1600 1600` (0) | `jit.gl.videoplane hub @layer 2 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
-| 151 | `route foto tinta luna paisaje figuras boceto sombrero noche` (1) | `jit.gl.videoplane hub @layer 2 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
-| 152 | `t b b b b b b b b` (5) | `[msg] importmovie e2_luna_luna.png, bang` (0) |
+| 151 | `route foto tinta luna paisaje figuras boceto sombrero noche hongo criatura` (1) | `jit.gl.videoplane hub @layer 2 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
+| 152 | `t b b b b b b b b b b` (7) | `[msg] importmovie e2_luna_luna.png, bang` (0) |
 | 153 | `[msg] importmovie e2_luna_luna.png, bang` (0) | `jit.matrix 4 char 1600 1600` (0) |
 | 154 | `jit.matrix 4 char 1600 1600` (0) | `jit.gl.videoplane hub @layer 3 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
-| 155 | `route foto tinta luna paisaje figuras boceto sombrero noche` (2) | `jit.gl.videoplane hub @layer 3 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
-| 156 | `t b b b b b b b b` (4) | `[msg] importmovie e2_luna_paisaje.png, bang` (0) |
+| 155 | `route foto tinta luna paisaje figuras boceto sombrero noche hongo criatura` (2) | `jit.gl.videoplane hub @layer 3 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
+| 156 | `t b b b b b b b b b b` (6) | `[msg] importmovie e2_luna_paisaje.png, bang` (0) |
 | 157 | `[msg] importmovie e2_luna_paisaje.png, bang` (0) | `jit.matrix 4 char 1600 1600` (0) |
 | 158 | `jit.matrix 4 char 1600 1600` (0) | `jit.gl.videoplane hub @layer 4 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
-| 159 | `route foto tinta luna paisaje figuras boceto sombrero noche` (3) | `jit.gl.videoplane hub @layer 4 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
-| 160 | `t b b b b b b b b` (3) | `[msg] importmovie e3_bosque_figuras.png, bang` (0) |
+| 159 | `route foto tinta luna paisaje figuras boceto sombrero noche hongo criatura` (3) | `jit.gl.videoplane hub @layer 4 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
+| 160 | `t b b b b b b b b b b` (5) | `[msg] importmovie e3_bosque_figuras.png, bang` (0) |
 | 161 | `[msg] importmovie e3_bosque_figuras.png, bang` (0) | `jit.matrix 4 char 1200 1600` (0) |
 | 162 | `jit.matrix 4 char 1200 1600` (0) | `jit.gl.videoplane hub @layer 5 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
-| 163 | `route foto tinta luna paisaje figuras boceto sombrero noche` (4) | `jit.gl.videoplane hub @layer 5 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
-| 164 | `t b b b b b b b b` (2) | `[msg] importmovie e1_mano_boceto.png, bang` (0) |
+| 163 | `route foto tinta luna paisaje figuras boceto sombrero noche hongo criatura` (4) | `jit.gl.videoplane hub @layer 5 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
+| 164 | `t b b b b b b b b b b` (4) | `[msg] importmovie e1_mano_boceto.png, bang` (0) |
 | 165 | `[msg] importmovie e1_mano_boceto.png, bang` (0) | `jit.matrix 4 char 1600 1600` (0) |
 | 166 | `jit.matrix 4 char 1600 1600` (0) | `jit.gl.videoplane hub @layer 6 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
-| 167 | `route foto tinta luna paisaje figuras boceto sombrero noche` (5) | `jit.gl.videoplane hub @layer 6 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
-| 168 | `t b b b b b b b b` (1) | `[msg] importmovie e4_sombrero_foto.png, bang` (0) |
+| 167 | `route foto tinta luna paisaje figuras boceto sombrero noche hongo criatura` (5) | `jit.gl.videoplane hub @layer 6 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
+| 168 | `t b b b b b b b b b b` (3) | `[msg] importmovie e4_sombrero_foto.png, bang` (0) |
 | 169 | `[msg] importmovie e4_sombrero_foto.png, bang` (0) | `jit.matrix 4 char 721 1280` (0) |
 | 170 | `jit.matrix 4 char 721 1280` (0) | `jit.gl.videoplane hub @layer 7 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
-| 171 | `route foto tinta luna paisaje figuras boceto sombrero noche` (6) | `jit.gl.videoplane hub @layer 7 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
-| 172 | `t b b b b b b b b` (0) | `[msg] importmovie e4_sombrero_noche.png, bang` (0) |
+| 171 | `route foto tinta luna paisaje figuras boceto sombrero noche hongo criatura` (6) | `jit.gl.videoplane hub @layer 7 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
+| 172 | `t b b b b b b b b b b` (2) | `[msg] importmovie e4_sombrero_noche.png, bang` (0) |
 | 173 | `[msg] importmovie e4_sombrero_noche.png, bang` (0) | `jit.matrix 4 char 721 1280` (0) |
 | 174 | `jit.matrix 4 char 721 1280` (0) | `jit.gl.videoplane hub @layer 8 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
-| 175 | `route foto tinta luna paisaje figuras boceto sombrero noche` (7) | `jit.gl.videoplane hub @layer 8 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
-| 176 | `[live.toggle] animar` (0) | `qmetro 16` (0) |
-| 177 | `qmetro 16` (0) | `js hub_anim.js` (0) |
-| 178 | `loadbang` (0) | `delay 100` (0) |
-| 179 | `delay 100` (0) | `[msg] scene 1, snap` (0) |
-| 180 | `[msg] scene 1, snap` (0) | `js hub_anim.js` (0) |
-| 181 | `[live.toggle] pantalla_completa` (0) | `prepend fullscreen` (0) |
-| 182 | `prepend fullscreen` (0) | `jit.world hub @enable 1 @erase_color 0 0 0 1 @size 960 540 @fsmenubar 0 @fsaa 1` (0) |
-| 183 | `jit.world hub @enable 1 @erase_color 0 0 0 1 @size 960 540 @fsmenubar 0 @fsaa 1` (1) | `[jit.fpsgui]` (0) |
-| 184 | `ctlin` (0) | `[number]` (0) |
-| 185 | `ctlin` (1) | `[number]` (0) |
-| 186 | `ctlin` (2) | `[number]` (0) |
-| 187 | `notein` (0) | `[number]` (0) |
-| 188 | `notein` (1) | `[number]` (0) |
-| 189 | `notein` (2) | `[number]` (0) |
-| 190 | `loadbang` (0) | `[msg] -1` (0) |
-| 191 | `[msg] -1` (0) | `midiinfo` (1) |
-| 192 | `midiinfo` (0) | `[umenu]` (0) |
-| 193 | `[umenu]` (1) | `ctlin` (0) |
-| 194 | `[umenu]` (1) | `notein` (0) |
-| 195 | `[umenu]` (1) | `notein` (0) |
+| 175 | `route foto tinta luna paisaje figuras boceto sombrero noche hongo criatura` (7) | `jit.gl.videoplane hub @layer 8 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
+| 176 | `t b b b b b b b b b b` (1) | `[msg] importmovie e5_hongo_foto.png, bang` (0) |
+| 177 | `[msg] importmovie e5_hongo_foto.png, bang` (0) | `jit.matrix 4 char 900 1600` (0) |
+| 178 | `jit.matrix 4 char 900 1600` (0) | `jit.gl.videoplane hub @layer 9 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
+| 179 | `route foto tinta luna paisaje figuras boceto sombrero noche hongo criatura` (8) | `jit.gl.videoplane hub @layer 9 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
+| 180 | `t b b b b b b b b b b` (0) | `[msg] importmovie e5_hongo_criatura.png, bang` (0) |
+| 181 | `[msg] importmovie e5_hongo_criatura.png, bang` (0) | `jit.matrix 4 char 900 1600` (0) |
+| 182 | `jit.matrix 4 char 900 1600` (0) | `jit.gl.videoplane hub @layer 10 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
+| 183 | `route foto tinta luna paisaje figuras boceto sombrero noche hongo criatura` (9) | `jit.gl.videoplane hub @layer 10 @blend_enable 1 @depth_enable 0 @transform_reset 1 @color 1 1 1 0 @enable 0` (0) |
+| 184 | `[live.toggle] animar` (0) | `qmetro 16` (0) |
+| 185 | `qmetro 16` (0) | `js hub_anim.js` (0) |
+| 186 | `loadbang` (0) | `delay 100` (0) |
+| 187 | `delay 100` (0) | `[msg] scene 1, snap` (0) |
+| 188 | `[msg] scene 1, snap` (0) | `js hub_anim.js` (0) |
+| 189 | `[live.toggle] pantalla_completa` (0) | `prepend fullscreen` (0) |
+| 190 | `prepend fullscreen` (0) | `jit.world hub @enable 1 @erase_color 0 0 0 1 @size 960 540 @fsmenubar 0 @fsaa 1` (0) |
+| 191 | `jit.world hub @enable 1 @erase_color 0 0 0 1 @size 960 540 @fsmenubar 0 @fsaa 1` (1) | `[jit.fpsgui]` (0) |
+| 192 | `ctlin` (0) | `[number]` (0) |
+| 193 | `ctlin` (1) | `[number]` (0) |
+| 194 | `ctlin` (2) | `[number]` (0) |
+| 195 | `notein` (0) | `[number]` (0) |
+| 196 | `notein` (1) | `[number]` (0) |
+| 197 | `notein` (2) | `[number]` (0) |
+| 198 | `loadbang` (0) | `[msg] -1` (0) |
+| 199 | `[msg] -1` (0) | `midiinfo` (1) |
+| 200 | `midiinfo` (0) | `[umenu]` (0) |
+| 201 | `[umenu]` (1) | `ctlin` (0) |
+| 202 | `[umenu]` (1) | `notein` (0) |
+| 203 | `[umenu]` (1) | `notein` (0) |

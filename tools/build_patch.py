@@ -52,6 +52,8 @@ CAPAS = [
     ("boceto",   "e1_mano_boceto.png",     6),
     ("sombrero", "e4_sombrero_foto.png",   7),
     ("noche",    "e4_sombrero_noche.png",  8),
+    ("hongo",    "e5_hongo_foto.png",      9),
+    ("criatura", "e5_hongo_criatura.png", 10),
 ]
 
 # Pads: (banco, número, etiqueta, mensaje al motor JS). Escena = número de pad:
@@ -66,7 +68,7 @@ PADS = [
     ("A", 7, "A7 · SEGURA", "scene 6"),
     ("A", 8, "A8 · NEGRO", None),          # va al toggle de negro (cada golpe alterna)
     ("B", 1, "B1 · Sombrero", "scene 11"),
-    ("B", 2, "B2 · (próx. par)", "scene 12"),
+    ("B", 2, "B2 · Hongo criatura", "scene 12"),
     ("B", 3, "B3 · (próx. par)", "scene 13"),
     ("B", 4, "B4 · (próx. par)", "scene 14"),
     ("B", 5, "B5 · (próx. par)", "scene 15"),
@@ -75,8 +77,9 @@ PADS = [
     ("B", 8, "B8 · NEGRO", None),
 ]
 # Notas del LPD8 Wireless. A: medido en el ensayo 2026-11-15 (36–43, canal 10).
-# B: SIN MEDIR todavía; 44 es una suposición que se ajusta en pantalla con el
-# monitor MIDI ("nota B1"). El aviso de empalme se enciende si los rangos chocan.
+# B: 2026-11-19 el usuario verificó en el LPD8 que A y B no se empalman (aviso "sin
+# empalme"). Si en pantalla se ajustó "nota B1", poner aquí ese valor. El aviso de
+# empalme se enciende si los rangos chocan.
 NOTA_A1 = 36
 NOTA_B1 = 44
 # Teclas: fila de números = banco A; fila q-w-e-r-t-y-u-i = banco B.

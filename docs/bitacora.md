@@ -44,7 +44,17 @@ para pasarlo a `tools/build_patch.py`.
   Pads 6/7/8 iguales en ambos bancos. B2–B5 reservados para los próximos 4 pares.
 - Por probar: nota real de B1 en el LPD8 Wireless; que el aviso diga "sin empalme".
 
+- 2026-11-19: verificado en el LPD8 — bancos A y B sin empalme, ambos funcionan.
+
+## 2026-11-19 — obra 5 "Hongo y criatura" (par 2 de 5) en B2
+
+- Archivos: `par06-02.jpeg` (foto de hongos cola de pavo, opaca) y `par06-01.jpeg`
+  (criatura pintada sobre negro → modo `luma`), 900×1600 (9:16).
+- Escena 12: K1 de los hongos a la criatura; capas independientes (encuadres distintos),
+  la criatura flota y gira suave sobre su torso. El cuello de la criatura repite los
+  anillos naranja/verde del hongo.
+
 ### Notas del próximo ensayo (llenar)
-- Nota que manda B1 (luz roja):
+- Nota que manda B1 (luz roja), si no es 44:
 - fps escena 4 en pantalla completa:
 - Escenas que funcionaron / que no:

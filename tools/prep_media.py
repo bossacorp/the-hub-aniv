@@ -42,6 +42,9 @@ CAPAS = [
     # Obra 4 — "Sombrero" (721 x 1280, vertical 9:16; archivos del diseñador par05-*)
     ("par05-01.jpeg", "e4_sombrero_foto.png", "opaca"),                 # fotografía de día
     ("par05-02.jpeg", "e4_sombrero_noche.png", "luma"),                 # pintura nocturna sobre negro
+    # Obra 5 — "Hongo y criatura" (900 x 1600, vertical 9:16; archivos par06-*)
+    ("par06-02.jpeg", "e5_hongo_foto.png", "opaca"),                    # fotografía de hongos (cola de pavo)
+    ("par06-01.jpeg", "e5_hongo_criatura.png", "luma"),                 # criatura pintada sobre negro
 ]
 
 UMBRAL_LUMA = 6   # 0–255: el ruido de compresión JPEG por debajo de esto se vuelve transparente
