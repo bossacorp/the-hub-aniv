@@ -76,11 +76,15 @@ var CAPAS = {
     // Obra 7 — "Acuarela y noche" (panorámica 2.74:1). Encuadres distintos.
     // Con s = 0.65 el ancho llena una pantalla 16:9 (franjas negras arriba y abajo).
     noche7:   { asp: 1280 / 468, piv: [0, 0] },                    // e7_acuarela_noche.png   (opaca)
-    reflejo:  { asp: 1280 / 468, piv: [0, 0] }                     // e7_acuarela_reflejo.png (alfa: papel fuera, color pastel)
+    reflejo:  { asp: 1280 / 468, piv: [0, 0] },                    // e7_acuarela_reflejo.png (alfa: papel fuera, color pastel)
+    // Obra 8 — "Calaveras en la luna" (cuadrada). La textura abstracta llena toda la
+    // pantalla (se recorta arriba/abajo sin problema); la ilustración flota encima.
+    textura:   { asp: 1.0, piv: [0, 0] },                          // e8_luna_textura.png   (opaca)
+    calaveras: { asp: 1.0, piv: [0, 0] }                           // e8_luna_calaveras.png (alfa por brillo, fuerte)
 };
 // Orden de proceso. Una capa que "sigue" a otra va DESPUÉS de su guía.
 var NOMBRES = ["foto", "tinta", "luna", "paisaje", "figuras", "boceto", "sombrero", "noche",
-               "hongo", "criatura", "ficus", "nahual", "noche7", "reflejo"];
+               "hongo", "criatura", "ficus", "nahual", "noche7", "reflejo", "textura", "calaveras"];
 
 // ------------------------------------------------------------------
 // ESCENAS
@@ -140,8 +144,13 @@ var ESCENAS = {
         // aparece debajo y la acuarela queda como un velo · 1: la noche completa.
         noche7:  { a0: 0.0, a1: 1.0,  s: 0.65, x: 0, y: 0, resp: 0.010, deriva: 0.010, giro: 0 },
         reflejo: { a0: 1.0, a1: 0.15, s: 0.65, x: 0, y: 0, resp: 0.020, deriva: 0.025, giro: 0 }
+    }},
+    15: { nombre: "Calaveras en la luna", capas: {
+        // K1 en 0: solo la textura, como un cielo abstracto que llena la pantalla · 0.5: la
+        // pareja en la luna aparece sobre la textura · 1: la ilustración plena, textura tenue.
+        textura:   { a0: 1.0, a1: 0.35, s: 1.85, x: 0, y: 0, resp: 0.020, deriva: 0.030, giro: 2.0 },
+        calaveras: { a0: 0.0, a1: 1.0,  s: 1.0,  x: 0, y: 0, resp: 0.025, deriva: 0.010, giro: 1.0 }
     }}
-    // 15: último par del diseñador
 };
 
 // Frecuencias base (Hz) de los osciladores, a velocidad 1.

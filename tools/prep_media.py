@@ -12,6 +12,9 @@ Modos por capa:
   "luma"  — capa pintada sobre NEGRO sin transparencia (JPEG). El brillo se vuelve
             alfa: el negro desaparece y lo luminoso queda (como un modo "pantalla").
             Sobre fondo negro se ve idéntica al original.
+  "luma_fuerte" — como "luma" pero los oscuros quedan más opacos (alfa reforzado ×3):
+            para ilustraciones con fondo negro y figuras con zonas oscuras (trajes, sombras)
+            que no deben volverse transparentes sobre otra capa. Sobre negro, idéntica.
   "papel" — capa pintada sobre BLANCO sin transparencia (acuarela). Lo inverso de "luma":
             el blanco del papel se vuelve transparente y queda la pintura (como un modo
             "multiplicar"). Sobre fondo blanco se ve idéntica al original; sobre negro, los
@@ -26,7 +29,10 @@ Uso:
     python3 tools/prep_media.py --max 2048   # más resolución
 
 Para agregar una obra nueva: copia sus capas a media_src/ y agrega una línea
-a CAPAS con (archivo_original, nombre_en_show, modo).
+a CAPAS con (archivo_original, nombre_en_show, modo[, opciones]).
+Opciones (dict, opcional):
+  difumina: 0–0.5  fracción del lado que se desvanece en las orillas (quita bordes
+                   rectos de una ilustración que flota sobre otra capa).
 """
 import argparse
 import os
@@ -59,18 +65,22 @@ CAPAS = [
     # Obra 7 — "Acuarela y noche" (1280 x 468, panorámica 2.74:1; archivos par04-*)
     ("par04-01.jpeg", "e7_acuarela_reflejo.png", "pastel"),             # paisaje reflejado en acuarela sobre blanco
     ("par04-02.jpeg", "e7_acuarela_noche.png", "opaca"),                # escena nocturna: sol, madre e hijo, estrellas
+    # Obra 8 — "Calaveras en la luna" (1280 x 1280, cuadrada; archivos par08-*)
+    ("par08-01.jpeg", "e8_luna_textura.png", "opaca"),                  # textura de aerosol verde/violeta (fondo)
+    ("par08-02.jpeg", "e8_luna_calaveras.png", "luma_fuerte",           # pareja de calaveras en la luna creciente
+     {"difumina": 0.14}),                                               # orillas suaves sobre la textura
 ]
 
 UMBRAL_LUMA = 6   # 0–255: el ruido de compresión JPEG por debajo de esto se vuelve transparente
 REFUERZO_PASTEL = 2.5   # modo "pastel": cuánto se refuerza la pintura (más = más opaca)
 
 
-def a_luma(im):
-    """Negro → transparente. alfa = canal más brillante; color = color / alfa (sin premultiplicar),
-    así alfa*color reproduce el original exacto sobre negro."""
+def a_luma(im, refuerzo=1.0):
+    """Negro → transparente. alfa = canal más brillante (× refuerzo); color = color / alfa (sin
+    premultiplicar), así alfa*color reproduce el original exacto sobre negro."""
     rgb = np.asarray(im.convert("RGB")).astype(np.float32)
     m = rgb.max(axis=2)
-    a = np.clip((m - UMBRAL_LUMA) / (255.0 - UMBRAL_LUMA), 0, 1)
+    a = np.clip((m - UMBRAL_LUMA) / (255.0 - UMBRAL_LUMA) * refuerzo, 0, 1)
     seguro = np.maximum(a, 1e-6)[..., None]
     col = np.clip(rgb / 255.0 / seguro, 0, 1)
     col[a == 0] = 0
@@ -101,6 +111,19 @@ def a_pastel(im):
     return Image.fromarray(out, "RGBA")
 
 
+def difuminar(im, frac):
+    """Desvanece el alfa hacia las orillas (rampa suave en una franja de `frac` del lado)."""
+    a = np.asarray(im).astype(np.float32)
+    h, w = a.shape[:2]
+    def rampa(n):
+        t = np.minimum(np.arange(n), np.arange(n)[::-1]) / max(1.0, frac * n)
+        t = np.clip(t, 0, 1)
+        return t * t * (3 - 2 * t)          # suavizado (smoothstep)
+    mascara = rampa(h)[:, None] * rampa(w)[None, :]
+    a[..., 3] *= mascara
+    return Image.fromarray(a.round().astype(np.uint8), "RGBA")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--max", type=int, default=1600, help="lado mayor en px")
@@ -108,7 +131,8 @@ def main():
     src_dir = os.path.join(RAIZ, "media_src")
     dst_dir = os.path.join(RAIZ, "show")
     os.makedirs(dst_dir, exist_ok=True)
-    for src, dst, modo in CAPAS:
+    for src, dst, modo, *extra in CAPAS:
+        opciones = extra[0] if extra else {}
         ruta = os.path.join(src_dir, src)
         if not os.path.exists(ruta):
             print(f"FALTA {src} (se conserva show/{dst} si existe)")
@@ -121,15 +145,19 @@ def main():
             im = im.resize((round(w * k), round(h * k)), Image.LANCZOS)
         if modo == "luma":
             im = a_luma(im)
+        elif modo == "luma_fuerte":
+            im = a_luma(im, refuerzo=3.0)
         elif modo == "papel":
             im = a_papel(im)
         elif modo == "pastel":
             im = a_pastel(im)
         elif modo == "opaca":
             im = im.convert("RGBA")   # alfa 255: mismo formato ARGB que las demás en Jitter
+        if opciones.get("difumina"):
+            im = difuminar(im.convert("RGBA"), opciones["difumina"])
         out = os.path.join(dst_dir, dst)
         im.save(out, optimize=True)
-        print(f"{src:34s} {w}x{h} -> {dst} {im.size[0]}x{im.size[1]} [{modo}] "
+        print(f"{src:34s} {w}x{h} -> {dst} {im.size[0]}x{im.size[1]} [{modo}{' ' + str(opciones) if opciones else ''}] "
               f"({os.path.getsize(out) // 1024} KB)")
 
 

@@ -73,6 +73,19 @@ para pasarlo a `tools/build_patch.py`.
 - Escena 14: s = 0.65 para que la panorámica llene el ancho 16:9. K1 de la acuarela sola
   a la noche; en 0.5 la acuarela es una bruma sobre la noche.
 
+## 2026-11-19 — obra 8 "Calaveras en la luna" (par 5 de 5) en B5 · set completo
+
+- Archivos: `par08-01.jpeg` (textura de aerosol verde/violeta, opaca) y `par08-02.jpeg`
+  (pareja de calaveras besándose en la luna creciente, fondo oscuro), 1280×1280.
+- Nuevo modo `luma_fuerte` (alfa ×3): el fondo negro desaparece pero los oscuros de los
+  trajes no se vuelven transparentes sobre la textura. Orillas difuminadas (14 %) para que
+  no se vea el cuadro de la ilustración.
+- Escena 15: la textura llena toda la pantalla (s = 1.85) como cielo abstracto; K1 hace
+  aparecer a la pareja.
+- Set completo: banco A = obras 1–3 + 2 cruces; banco B = obras 4–8. 16 capas, 11 escenas.
+- Por probar en Max: fps con las 16 texturas cargadas en la MacBook Pro (solo se dibujan
+  las capas visibles: las demás van con `enable 0`).
+
 ### Notas del próximo ensayo (llenar)
 - Nota que manda B1 (luz roja), si no es 44:
 - fps escena 4 en pantalla completa:

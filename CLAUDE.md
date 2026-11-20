@@ -21,7 +21,9 @@ producción. Responde en español.
   2. `tools/prep_media.py` → `CAPAS` con modo `alfa` (PNG con transparencia), `opaca`
      (foto/fondo), `luma` (pintura sobre negro sin alfa: el brillo se vuelve alfa) o
      `pastel` (pintura sobre blanco que irá sobre negro: el papel se vuelve transparente y
-     se conserva el color; `papel` existe pero sobre negro deja los pastel turbios);
+     se conserva el color; `papel` existe pero sobre negro deja los pastel turbios) o
+     `luma_fuerte` (como luma, con oscuros más opacos). Opción `{"difumina": 0.14}` para
+     desvanecer orillas de una ilustración que flota sobre otra capa;
   3. `show/hub_anim.js` → `CAPAS` (aspecto ancho/alto; `sigue: "<guía>"` si es el mismo
      encuadre que otra capa, para que se muevan pegadas), `NOMBRES` y una escena en `ESCENAS`;
   4. `tools/build_patch.py` → `CAPAS` (archivo, `@layer` siguiente) y la etiqueta del pad en `PADS`;

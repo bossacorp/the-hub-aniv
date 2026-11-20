@@ -58,6 +58,8 @@ CAPAS = [
     ("nahual",   "e6_nahual_animales.png", 12),
     ("noche7",   "e7_acuarela_noche.png",  13),
     ("reflejo",  "e7_acuarela_reflejo.png", 14),
+    ("textura",  "e8_luna_textura.png",    15),
+    ("calaveras", "e8_luna_calaveras.png", 16),
 ]
 
 # Pads: (banco, número, etiqueta, mensaje al motor JS). Escena = número de pad:
@@ -75,7 +77,7 @@ PADS = [
     ("B", 2, "B2 · Hongo criatura", "scene 12"),
     ("B", 3, "B3 · Nahual", "scene 13"),
     ("B", 4, "B4 · Acuarela noche", "scene 14"),
-    ("B", 5, "B5 · (próx. par)", "scene 15"),
+    ("B", 5, "B5 · Calaveras luna", "scene 15"),
     ("B", 6, "B6 · Pulso", "pulse"),
     ("B", 7, "B7 · SEGURA", "scene 6"),
     ("B", 8, "B8 · NEGRO", None),

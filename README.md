@@ -23,7 +23,7 @@ Instrucciones completas, mapeo MIDI, problemas comunes y checklist de ensayo:
 show/        ← TODO lo que necesita Max, en una sola carpeta (copiar esta carpeta basta)
   the-hub-aniv_v03.maxpat   patch (generado por tools/build_patch.py)
   hub_anim.js               motor de escenas y animación (js clásico, Max 8/9)
-  e1_* … e4_*.png           capas del diseñador optimizadas (≤1600 px, con alfa)
+  e1_* … e8_*.png           capas del diseñador optimizadas (≤1600 px, con alfa): 8 obras
 tools/
   build_patch.py            genera el .maxpat (editar aquí, no a mano)
   maxpat_builder.py         biblioteca de generación de patches
