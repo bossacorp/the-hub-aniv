@@ -54,6 +54,14 @@ para pasarlo a `tools/build_patch.py`.
   la criatura flota y gira suave sobre su torso. El cuello de la criatura repite los
   anillos naranja/verde del hongo.
 
+## 2026-11-19 — obra 6 "Nahual" (par 3 de 5) en B3
+
+- Archivos: `par07-01.jpeg` (ficus con silla roja y papel picado, opaca) y `par07-02.jpeg`
+  (jaguar nahual en la silla, jaguares y loros en las ramas, sobre negro → `luma`), 960×1280 (3:4).
+- La pintura está calcada sobre la foto → capa `nahual` con `sigue: "ficus"`.
+- Escena 13: K1 de la silla vacía a los animales habitando el árbol; la foto baja a 30 %,
+  no a negro, para que el lugar siga presente.
+
 ### Notas del próximo ensayo (llenar)
 - Nota que manda B1 (luz roja), si no es 44:
 - fps escena 4 en pantalla completa:

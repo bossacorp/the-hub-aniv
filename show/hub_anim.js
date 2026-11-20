@@ -68,11 +68,15 @@ var CAPAS = {
     // Obra 5 — "Hongo y criatura" (9:16). Encuadres distintos: cada capa se mueve
     // por su lado (la criatura flota sobre la foto). La criatura gira sobre su torso.
     hongo:    { asp: 900 / 1600, piv: [0, 0] },                    // e5_hongo_foto.png     (opaca)
-    criatura: { asp: 900 / 1600, piv: [0, 0.2] }                   // e5_hongo_criatura.png (alfa por brillo)
+    criatura: { asp: 900 / 1600, piv: [0, 0.2] },                  // e5_hongo_criatura.png (alfa por brillo)
+    // Obra 6 — "Nahual" (3:4). La pintura está calcada sobre la foto (el jaguar se
+    // sienta en la silla, los animales en las ramas): va pegada a la foto.
+    ficus:    { asp: 960 / 1280, piv: [0, 0] },                    // e6_nahual_foto.png     (opaca)
+    nahual:   { asp: 960 / 1280, piv: [0, 0], sigue: "ficus" }     // e6_nahual_animales.png (alfa por brillo)
 };
 // Orden de proceso. Una capa que "sigue" a otra va DESPUÉS de su guía.
 var NOMBRES = ["foto", "tinta", "luna", "paisaje", "figuras", "boceto", "sombrero", "noche",
-               "hongo", "criatura"];
+               "hongo", "criatura", "ficus", "nahual"];
 
 // ------------------------------------------------------------------
 // ESCENAS
@@ -120,8 +124,14 @@ var ESCENAS = {
         // los hongos como un eco tenue. El cuello de la criatura repite los anillos del hongo.
         hongo:    { a0: 1.0,  a1: 0.2, s: 1.0, x: 0, y: 0, resp: 0.015, deriva: 0.012, giro: 0 },
         criatura: { a0: 0.15, a1: 1.0, s: 1.0, x: 0, y: 0, resp: 0.030, deriva: 0.020, giro: 1.2 }
+    }},
+    13: { nombre: "Nahual", capas: {
+        // K1 en 0: el ficus con la silla vacía · 0.5: aparecen los animales · 1: los animales
+        // habitan el árbol, la foto queda en penumbra (no se apaga: el lugar sigue ahí).
+        ficus:  { a0: 1.0, a1: 0.3, s: 1.0, x: 0, y: 0, resp: 0.012, deriva: 0.008, giro: 0.3 },
+        nahual: { a0: 0.0, a1: 1.0 }     // geometría y movimiento: los de "ficus"
     }}
-    // 13–15: próximos pares del diseñador
+    // 14–15: próximos pares del diseñador
 };
 
 // Frecuencias base (Hz) de los osciladores, a velocidad 1.

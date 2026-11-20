@@ -45,6 +45,9 @@ CAPAS = [
     # Obra 5 — "Hongo y criatura" (900 x 1600, vertical 9:16; archivos par06-*)
     ("par06-02.jpeg", "e5_hongo_foto.png", "opaca"),                    # fotografía de hongos (cola de pavo)
     ("par06-01.jpeg", "e5_hongo_criatura.png", "luma"),                 # criatura pintada sobre negro
+    # Obra 6 — "Nahual" (960 x 1280, vertical 3:4; archivos par07-*)
+    ("par07-01.jpeg", "e6_nahual_foto.png", "opaca"),                   # ficus con silla roja y papel picado
+    ("par07-02.jpeg", "e6_nahual_animales.png", "luma"),                # jaguar nahual, jaguares y loros sobre negro
 ]
 
 UMBRAL_LUMA = 6   # 0–255: el ruido de compresión JPEG por debajo de esto se vuelve transparente

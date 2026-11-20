@@ -54,6 +54,8 @@ CAPAS = [
     ("noche",    "e4_sombrero_noche.png",  8),
     ("hongo",    "e5_hongo_foto.png",      9),
     ("criatura", "e5_hongo_criatura.png", 10),
+    ("ficus",    "e6_nahual_foto.png",     11),
+    ("nahual",   "e6_nahual_animales.png", 12),
 ]
 
 # Pads: (banco, número, etiqueta, mensaje al motor JS). Escena = número de pad:
@@ -69,7 +71,7 @@ PADS = [
     ("A", 8, "A8 · NEGRO", None),          # va al toggle de negro (cada golpe alterna)
     ("B", 1, "B1 · Sombrero", "scene 11"),
     ("B", 2, "B2 · Hongo criatura", "scene 12"),
-    ("B", 3, "B3 · (próx. par)", "scene 13"),
+    ("B", 3, "B3 · Nahual", "scene 13"),
     ("B", 4, "B4 · (próx. par)", "scene 14"),
     ("B", 5, "B5 · (próx. par)", "scene 15"),
     ("B", 6, "B6 · Pulso", "pulse"),
